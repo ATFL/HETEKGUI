@@ -10,7 +10,8 @@ from PyQt5.QtCore import *
 import pyqtgraph as pg
 from datetime import datetime
 import Adafruit_ADS1x15 as ads
-from adafruit_motorkit import MotorKit, stepper
+from adafruit_motorkit import MotorKit
+from adafruit_motor import stepper
 
 app = QApplication(sys.argv)
 
