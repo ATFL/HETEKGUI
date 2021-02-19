@@ -410,9 +410,9 @@ class mainWindow(QWidget):
 		self.layout.addWidget(self.b9, 6, 4, 1, 1)
 		self.layout.addWidget(self.b10, 7, 4, 1, 1)
 		self.layout.addWidget(self.b11, 6, 5, 1, 1)
-		self.layout.addWidget(self.b12, 4, 6, 1, 1)
-		self.layout.addWidget(self.b13, 4, 8, 1, 1)
-		self.layout.addWidget(self.b14, 4, 7, 1, 1)
+		self.layout.addWidget(self.b12, 2, 5, 1, 1)
+		self.layout.addWidget(self.b13, 3, 5, 1, 1)
+		self.layout.addWidget(self.b14, 4, 5, 1, 1)
 		self.layout.addWidget(self.b15, 7, 5, 1, 1)
 
 		self.setLayout(self.layout)
