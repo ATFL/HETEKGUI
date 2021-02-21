@@ -272,7 +272,7 @@ class mainWindow(QWidget):
 
 		self.saveMsg = self.showMessage("Click Ok to Save File, Cancel to skip")
 		if self.saveMsg == QMessageBox.Ok:
-			filename = "{}.csv".format(datetime.now().strftime('%Y_%m_%d_%H%M%S'))
+			filename = "data/{}.csv".format(datetime.now().strftime('%Y_%m_%d_%H%M%S'))
 			np.savetxt(filename, self.dataArray, fmt='%.10f', delimiter=',')
 
 		self.purgeMsg = self.showMessage("Click Ok to start Purge, Cancel to skip")
