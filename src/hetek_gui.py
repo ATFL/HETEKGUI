@@ -28,6 +28,12 @@ class mainWindow(QWidget):
 			self.conversion_value = (self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144
 			return self.conversion_value
 
+	class MOS2:
+		def __init__(self):
+			pass
+		def read(self):
+			return 0
+
 	class Graph(pg.PlotWidget):
 		def __init__(self, parent=None):
 			super(mainWindow.Graph, self).__init__()
@@ -176,9 +182,9 @@ class mainWindow(QWidget):
 
 	def systemSetup(self):
 		self.kit = MotorKit(i2c=board.I2C())
-		self.adc = ads.ADS1115(0x48)
-		self.sensor1 = self.MOS(self.adc, 0)
-		self.sensor2 = self.MOS(self.adc, 1)
+		#self.adc = ads.ADS1115(0x48)
+		self.sensor1 = self.MOS2()
+		self.sensor2 = self.MOS2()
 		self.stepperA = self.Stepper()
 
 	def widgetSetup(self):
