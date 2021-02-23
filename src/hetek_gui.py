@@ -339,19 +339,19 @@ class mainWindow(QWidget):
 
 	def fn_valve(self, status):
 		if status:
-			self.kit.motor3.throttle(1)
+			self.kit.motor3.throttle = 1
 		elif not status:
-			self.kit.motor3.throttle(0)
+			self.kit.motor3.throttle = 0
 		else:
-			self.kit.motor3.throttle(0)
+			self.kit.motor3.throttle = 0
 
 	def fn_pump(self, status):
 		if status:
-			self.kit.motor4.throttle(1)
+			self.kit.motor4.throttle = 1
 		elif not status:
-			self.kit.motor4.throttle(0)
+			self.kit.motor4.throttle = 0
 		else:
-			self.kit.motor4.throttle(0)
+			self.kit.motor4.throttle = 0
 
 	def fn_setBaseline(self):
 		pass
