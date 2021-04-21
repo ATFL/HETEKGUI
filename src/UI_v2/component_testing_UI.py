@@ -53,7 +53,7 @@ class GUI(QWidget):
 		def step(self, steps):
 			for i in range(steps):
 				if -20 < self.currentPos < 130:
-					QTimer.singleshot(0.01, lambda: self.motor.oneStep(direction=self.stepDirection, style=self.stepStyle))
+					QTimer.singleShot(0.01, lambda: self.motor.oneStep(direction=self.stepDirection, style=self.stepStyle))
 					if self.stepDirection == stepper.FORWARD:
 						self.currentPos = self.currentPos - 1
 					else:
