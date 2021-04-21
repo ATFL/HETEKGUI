@@ -113,7 +113,7 @@ class GUI(QWidget):
 
 	def systemSetup(self):
 		self.kit = MotorKit(i2c=board.I2C())
-		self.adc = adc.ADS1115(0x48)
+		# self.adc = adc.ADS1115(0x48)
 		self.SM = self.Stepper(self.kit.stepper1)
 		self.valve = self.MOTOR(self.kit.motor3)
 		self.pump = self.MOTOR(self.kit.motor4)
@@ -193,7 +193,7 @@ class GUI(QWidget):
 def main():
 	UI = GUI()
 	UI.show()
-	sys.exit(app.exec_())
+	sys.exit(app.exec())
 
 
 if __name__ == "__main__":
