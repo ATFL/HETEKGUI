@@ -17,16 +17,16 @@ app = QApplication(sys.argv)
 
 
 class GUI(QWidget):
-	class MOS:
-		def __init__(self, adc, channel):
-			super(GUI.MOS, self).__init__()
-			self.GAIN = 2 / 3
-			self.adc = adc
-			self.channel = channel
-
-		def read(self):
-			self.conversion_value = (self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144
-			return self.conversion_value
+	# class MOS:
+	# 	def __init__(self, adc, channel):
+	# 		super(GUI.MOS, self).__init__()
+	# 		self.GAIN = 2 / 3
+	# 		self.adc = adc
+	# 		self.channel = channel
+	#
+	# 	def read(self):
+	# 		self.conversion_value = (self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144
+	# 		return self.conversion_value
 
 	class graph(pg.PlotWidget):
 		def __init__(self):
@@ -118,9 +118,9 @@ class GUI(QWidget):
 		self.valve = self.MOTOR(self.kit.motor3)
 		self.pump = self.MOTOR(self.kit.motor4)
 
-		self.sensor1 = self.MOS(self.adc, 0)
-		self.sensor2 = self.MOS(self.adc, 1)
-		self.sensor3 = self.MOS(self.adc, 2)
+		# self.sensor1 = self.MOS(self.adc, 0)
+		# self.sensor2 = self.MOS(self.adc, 1)
+		# self.sensor3 = self.MOS(self.adc, 2)
 
 	def buttonSetup(self):
 		self.b1 = self.button()
@@ -147,39 +147,39 @@ class GUI(QWidget):
 		self.b6.setButtonText("Toggle Pump")
 		self.b6.setButtonAction(self.pump.toggle())
 
-	def graphSetup(self):
-		self.sensorGraph = self.graph()
-		self.sensorGraph.setYRange(0, 5)
-
-		self.timeArray = list(range(200))
-		self.sensor1Array = [0 for _ in range(200)]
-		self.sensor2Array = [0 for _ in range(200)]
-		self.sensor3Array = [0 for _ in range(200)]
-
-		self.sensor1Plot = self.sensorGraph.plot(self.timeArray, self.sensor1Array, pen='r')
-		self.sensor2Plot = self.sensorGraph.plot(self.timeArray, self.sensor2Array, pen='g')
-		self.sensor2Plot = self.sensorGraph.plot(self.timeArray, self.sensor3Array, pen='b')
-
-		def updateGraph():
-			self.sensor1Array = self.sensor1Array[1:]
-			self.sensor2Array = self.sensor2Array[1:]
-			self.sensor3Array = self.sensor3Array[1:]
-			self.sensor1Array.append(self.sensor1.read())
-			self.sensor2Array.append(self.sensor2.read())
-			self.sensor3Array.append(self.sensor3.read())
-
-			self.sensor1Plot.setData(self.timeArray, self.sensor1Array)
-			self.sensor2Plot.setData(self.timeArray, self.sensor2Array)
-			self.sensor3Plot.setData(self.timeArray, self.sensor3Array)
-
-		self.graphTimer = QTimer()
-		self.graphTimer.timeout.connect(lambda: updateGraph())
-		self.graphTimer.start(100)
+	# def graphSetup(self):
+	# 	self.sensorGraph = self.graph()
+	# 	self.sensorGraph.setYRange(0, 5)
+	#
+	# 	self.timeArray = list(range(200))
+	# 	self.sensor1Array = [0 for _ in range(200)]
+	# 	self.sensor2Array = [0 for _ in range(200)]
+	# 	self.sensor3Array = [0 for _ in range(200)]
+	#
+	# 	self.sensor1Plot = self.sensorGraph.plot(self.timeArray, self.sensor1Array, pen='r')
+	# 	self.sensor2Plot = self.sensorGraph.plot(self.timeArray, self.sensor2Array, pen='g')
+	# 	self.sensor2Plot = self.sensorGraph.plot(self.timeArray, self.sensor3Array, pen='b')
+	#
+	# 	def updateGraph():
+	# 		self.sensor1Array = self.sensor1Array[1:]
+	# 		self.sensor2Array = self.sensor2Array[1:]
+	# 		self.sensor3Array = self.sensor3Array[1:]
+	# 		self.sensor1Array.append(self.sensor1.read())
+	# 		self.sensor2Array.append(self.sensor2.read())
+	# 		self.sensor3Array.append(self.sensor3.read())
+	#
+	# 		self.sensor1Plot.setData(self.timeArray, self.sensor1Array)
+	# 		self.sensor2Plot.setData(self.timeArray, self.sensor2Array)
+	# 		self.sensor3Plot.setData(self.timeArray, self.sensor3Array)
+	#
+	# 	self.graphTimer = QTimer()
+	# 	self.graphTimer.timeout.connect(lambda: updateGraph())
+	# 	self.graphTimer.start(100)
 
 	def UI(self):
 		self.layout = QGridLayout()
 
-		self.layout.addWidget(self.sensorGraph, 0, 0, 5, 5)
+		# self.layout.addWidget(self.sensorGraph, 0, 0, 5, 5)
 		self.layout.addWidget(self.b1, 6, 0, 1, 1)
 		self.layout.addWidget(self.b2, 6, 1, 1, 1)
 		self.layout.addWidget(self.b3, 7, 0, 1, 1)
