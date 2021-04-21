@@ -1,5 +1,4 @@
-import numpy as np
-import os
+
 import sys
 import board
 
@@ -9,7 +8,6 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 import pyqtgraph as pg
-from datetime import datetime
 
 import Adafruit_ADS1x15 as adc
 from adafruit_motorkit import MotorKit
