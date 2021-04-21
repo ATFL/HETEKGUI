@@ -77,12 +77,12 @@ class GUI(QWidget):
 
 		def activate(self):
 			if not self.status:
-				self.motor.throttle(1)
+				self.motor.throttle = 1
 				self.status = True
 
 		def deactivate(self):
 			if self.status:
-				self.motor.throttle(0)
+				self.motor.throttle = 0
 				self.status = False
 
 		def toggle(self):
