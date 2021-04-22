@@ -126,6 +126,9 @@ class GUI(QWidget):
 		self.valve = self.MOTOR(self.kit.motor3)
 		self.pump = self.MOTOR(self.kit.motor4)
 
+		self.valve.deactivate()
+		self.pump.deactivate()
+
 		# self.sensor1 = self.MOS(self.adc, 0)
 		# self.sensor2 = self.MOS(self.adc, 1)
 		# self.sensor3 = self.MOS(self.adc, 2)
@@ -133,27 +136,27 @@ class GUI(QWidget):
 	def buttonSetup(self):
 		self.b1 = self.button()
 		self.b1.setButtonText("Expose")
-		self.b1.setButtonAction(self.SM.expose())
+		self.b1.clicked.connect(lambda: self.SM.expose())
 
 		self.b2 = self.button()
 		self.b2.setButtonText("Recover")
-		self.b2.setButtonAction(self.SM.recover())
+		self.b2.clicked.connect(lambda: self.SM.recover())
 
 		self.b3 = self.button()
 		self.b3.setButtonText("<<")
-		self.b3.setButtonAction(self.SM.moveLeft())
+		self.b3.clicked.connect(lambda: self.SM.moveLeft())
 
 		self.b4 = self.button()
 		self.b4.setButtonText(">>")
-		self.b4.setButtonAction(self.SM.moveRight())
+		self.b4.clicked.connect(lambda: self.SM.moveRight())
 
 		self.b5 = self.button()
 		self.b5.setButtonText("Toggle Valve")
-		self.b5.setButtonAction(self.valve.toggle())
+		self.b5.clicked.connect(lambda: self.valve.toggle())
 
 		self.b6 = self.button()
 		self.b6.setButtonText("Toggle Pump")
-		self.b6.setButtonAction(self.pump.toggle())
+		self.b6.clicked.connect(lambda: self.pump.toggle())
 
 	# def graphSetup(self):
 	# 	self.sensorGraph = self.graph()
