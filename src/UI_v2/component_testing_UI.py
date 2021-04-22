@@ -52,14 +52,12 @@ class GUI(QWidget):
 
 		def step(self, steps):
 			for i in range(steps):
-				if -20 < self.currentPos < 130:
-					QTimer.singleShot(0.01, lambda: self.motor.onestep(direction=self.stepDirection, style=self.stepStyle))
-					if self.stepDirection == stepper.FORWARD:
-						self.currentPos = self.currentPos - 1
-					else:
-						self.currentPos = self.currentPos + 1
+				QTimer.singleShot(0.01, lambda: self.motor.onestep(direction=self.stepDirection, style=self.stepStyle))
+				if self.stepDirection == stepper.FORWARD:
+					self.currentPos = self.currentPos - 1
 				else:
-					print("Out of Bounds")
+					self.currentPos = self.currentPos + 1
+			self.motor.release()
 
 		def moveLeft(self):
 			self.stepDirection = stepper.FORWARD
