@@ -71,6 +71,7 @@ class GUI(QWidget):
 		def __init__(self, channel):
 			super(GUI.MOTOR, self).__init__()
 			self.motor = channel
+			self.motor.throttle = 0
 			self.status = False
 
 		def activate(self):
