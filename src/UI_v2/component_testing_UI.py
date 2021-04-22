@@ -107,9 +107,19 @@ class GUI(QWidget):
 
 	def __init__(self):
 		super(GUI, self).__init__()
-		self.systemSetup()
-		self.buttonSetup()
-		self.UI()
+		try:
+			self.systemSetup()
+		except:
+			print("Error with System Setup")
+		try:
+			self.buttonSetup()
+		except:
+			print("Error with Button Setup")
+		# self.graphSetup()
+		try:
+			self.UI()
+		except:
+			print("Error with UI setup")
 
 	def systemSetup(self):
 		self.kit = MotorKit(i2c=board.I2C())
