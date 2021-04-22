@@ -52,7 +52,7 @@ class GUI(QWidget):
 
 		def step(self, steps):
 			for i in range(steps):
-				QTimer.singleShot(0.01, lambda: self.motor.onestep(direction=self.stepDirection, style=self.stepStyle))
+				QTimer.singleShot(10, lambda: self.motor.onestep(direction=self.stepDirection, style=self.stepStyle))
 				if self.stepDirection == stepper.FORWARD:
 					self.currentPos = self.currentPos - 1
 				else:
@@ -100,11 +100,11 @@ class GUI(QWidget):
 		def setButtonText(self, text):
 			self.setText(text)
 
-		def setButtonAction(self, action):
-			self.clicked.connect(lambda: action)
+		# def setButtonAction(self, action):
+		# 	self.clicked.connect(lambda: action)
 
-	def __init__(self):
-		super(GUI, self).__init__()
+	def __init__(self, *args, **kwargs):
+		super(GUI, self).__init__(*args, **kwargs)
 		try:
 			self.systemSetup()
 		except:
