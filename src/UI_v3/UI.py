@@ -142,7 +142,7 @@ class Window(QWidget):
 
 class HomeWindow(Window):
     def __init__(self):
-        super().__init__()
+        super(HomeWindow, self).__init__()
 
 
 def main():
