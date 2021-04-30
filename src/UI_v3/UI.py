@@ -145,3 +145,11 @@ class HomeWindow(QWidget, Window):
         super().__init__()
 
 
+def main():
+    UI = HomeWindow()
+    UI.show()
+    sys.exit(app.exec_())
+
+
+if __name__ == "__main__":
+    main()
