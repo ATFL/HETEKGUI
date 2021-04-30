@@ -15,7 +15,7 @@ import Adafruit_ADS1x15 as adc
 from adafruit_motorkit import MotorKit
 from adafruit_motor import stepper
 
-import yaml
+
 
 app = QApplication(sys.argv)
 
@@ -149,6 +149,7 @@ def main():
     UI = HomeWindow()
     UI.show()
     sys.exit(app.exec_())
+    print("System Exited")
 
 
 if __name__ == "__main__":
