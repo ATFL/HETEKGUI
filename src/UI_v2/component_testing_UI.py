@@ -177,7 +177,7 @@ class GUI(QWidget):
 
 		self.sensor1Plot = self.sensorGraph.plot(self.timeArray, self.sensor1Array, pen='r')
 		self.sensor2Plot = self.sensorGraph.plot(self.timeArray, self.sensor2Array, pen='g')
-		self.sensor2Plot = self.sensorGraph.plot(self.timeArray, self.sensor3Array, pen='b')
+		self.sensor3Plot = self.sensorGraph.plot(self.timeArray, self.sensor3Array, pen='b')
 
 		def updateGraph():
 			self.sensor1Array = self.sensor1Array[1:]
