@@ -140,7 +140,7 @@ class Window(QWidget):
         print("Components Loaded")
 
 
-class HomeWindow(QWidget, Window):
+class HomeWindow(Window):
     def __init__(self):
         super().__init__()
 
