@@ -17,16 +17,16 @@ app = QApplication(sys.argv)
 
 
 class GUI(QWidget):
-	# class MOS:
-	# 	def __init__(self, adc, channel):
-	# 		super(GUI.MOS, self).__init__()
-	# 		self.GAIN = 2 / 3
-	# 		self.adc = adc
-	# 		self.channel = channel
-	#
-	# 	def read(self):
-	# 		self.conversion_value = (self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144
-	# 		return self.conversion_value
+	class MOS:
+		def __init__(self, adc, channel):
+			super(GUI.MOS, self).__init__()
+			self.GAIN = 2 / 3
+			self.adc = adc
+			self.channel = channel
+
+		def read(self):
+			self.conversion_value = (self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144
+			return self.conversion_value
 
 	class graph(pg.PlotWidget):
 		def __init__(self):
