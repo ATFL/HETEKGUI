@@ -402,7 +402,7 @@ class StartTestWindow(QWidget):
         print("Components Loaded")
 
     def graphSetup(self):
-        self.sensorGraph = self.graph()
+        self.sensorGraph = graph()
 
         self.timeArray = []
         self.sensor1Array = []
@@ -583,7 +583,7 @@ class SensorGraphWindow(QWidget):
         print("Components Loaded")
 
     def graphSetup(self):
-        self.sensorGraph = self.graph()
+        self.sensorGraph = graph()
 
         self.timeArray = []
         self.sensor1Array = []
