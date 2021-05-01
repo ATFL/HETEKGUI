@@ -558,9 +558,9 @@ class SensorGraphWindow(QWidget):
         super(SensorGraphWindow, self).__init__()
         self.loadWindowSettings()
         self.loadComponents()
-        self.HWButtonSetup()
+        self.SGWButtonSetup()
         self.graphSetup()
-        self.HWUI()
+        self.SGWUI()
 
     def loadWindowSettings(self):
         self.width = 480
