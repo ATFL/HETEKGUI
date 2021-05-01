@@ -376,7 +376,7 @@ class StartTestWindow(QWidget):
         super(StartTestWindow, self).__init__()
         self.loadWindowSettings()
         self.loadComponents()
-        self.sTWButtonSetup()
+        self.STWButtonSetup()
         self.graphSetup()
         self.STWUI()
 
