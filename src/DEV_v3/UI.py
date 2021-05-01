@@ -627,6 +627,7 @@ class SensorGraphWindow(QWidget):
     def SGWUI(self):
         self.layout = QGridLayout()
 
+        self.layout.addWidget(self.sensorGraph)
         self.layout.addWidget(self.b1)
         self.layout.addWidget(self.b2)
         self.layout.addWidget(self.b3)
