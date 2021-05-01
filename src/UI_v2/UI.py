@@ -15,22 +15,21 @@ import Adafruit_ADS1x15 as adc
 from adafruit_motorkit import MotorKit
 from adafruit_motor import stepper
 
-import yaml
 
 app = QApplication(sys.argv)
 
 
 class GUI(QWidget):
-	# class MOS:
-	# 	def __init__(self, adc, channel):
-	# 		super(GUI.MOS, self).__init__()
-	# 		self.GAIN = 2 / 3
-	# 		self.adc = adc
-	# 		self.channel = channel
-	#
-	# 	def read(self):
-	# 		self.conversion_value = (self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144
-	# 		return self.conversion_value
+	class MOS:
+		def __init__(self, adc, channel):
+			super(GUI.MOS, self).__init__()
+			self.GAIN = 2 / 3
+			self.adc = adc
+			self.channel = channel
+
+		def read(self):
+			self.conversion_value = (self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144
+			return self.conversion_value
 
 	class graph(pg.PlotWidget):
 		def __init__(self):
@@ -112,8 +111,6 @@ class GUI(QWidget):
 		def setButtonText(self, text):
 			self.setText(text)
 
-		# def setButtonAction(self, action):
-		# 	self.clicked.connect(lambda: action)
 
 	class HomeWindow(QWidget):
 		def __init__(self):
@@ -385,18 +382,18 @@ class GUI(QWidget):
 
 	def loadComponents(self):
 		self.kit = MotorKit(i2c=board.I2C())
-		# self.adc = adc.ADS1115(0x48)
+		self.adc = adc.ADS1115(0x48)
 		self.SM = self.Stepper(self.kit.stepper1)
 		self.valve = self.MOTOR(self.kit.motor3, "Valve")
 		self.pump = self.MOTOR(self.kit.motor4, "Pump")
 
 		self.valve.deactivate()
 		self.pump.deactivate()
-		self.SM.release()
+		self.SM.motor.release()
 
-		# self.sensor1 = self.MOS(self.adc, 0)
-		# self.sensor2 = self.MOS(self.adc, 1)
-		# self.sensor3 = self.MOS(self.adc, 2)
+		self.sensor1 = self.MOS(self.adc, 0)
+		self.sensor2 = self.MOS(self.adc, 1)
+		self.sensor3 = self.MOS(self.adc, 2)
 
 	class Purge:
 		def __init__(self):
@@ -407,8 +404,6 @@ class GUI(QWidget):
 
 	def purge(self):
 		pass
-
-	def
 
 	def liveGraph(self):
 		pass
