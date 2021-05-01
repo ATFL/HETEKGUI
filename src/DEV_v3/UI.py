@@ -120,8 +120,6 @@ class HomeWindow(QWidget):
     def __init__(self):
         super(HomeWindow, self).__init__()
         self.loadWindowSettings()
-        self.setStyleSheet('background-color: {}'.format(self.bg_color))
-        self.setGeometry(0, 0, self.width, self.height)
         # self.loadComponents()
         self.HWButtonSetup()
         self.HWUI()
@@ -130,6 +128,8 @@ class HomeWindow(QWidget):
         self.width = 480
         self.height = 320
         self.bg_color = '#484848'
+        self.setStyleSheet('background-color: {}'.format(self.bg_color))
+        self.setGeometry(0, 0, self.width, self.height)
         print("Window Settings Loaded")
 
     def loadComponents(self):
@@ -222,8 +222,6 @@ class PurgeWindow(QWidget):
     def __init__(self):
         super(PurgeWindow, self).__init__()
         self.loadWindowSettings()
-        self.setStyleSheet('background-color: {}'.format(self.bg_color))
-        self.setGeometry(0, 0, self.width, self.height)
         self.loadComponents()
         self.PWButtonSetup()
         self.PWUI()
@@ -232,6 +230,8 @@ class PurgeWindow(QWidget):
         self.width = 480
         self.height = 320
         self.bg_color = '#484848'
+        self.setStyleSheet('background-color: {}'.format(self.bg_color))
+        self.setGeometry(0, 0, self.width, self.height)
         print("Window Settings Loaded")
 
     def loadComponents(self):
@@ -300,6 +300,340 @@ class PurgeWindow(QWidget):
         self.setLayout(self.layout)
 
 
+class SettingsWindow(QWidget):
+    class button(QPushButton):
+        def __init__(self, *args, **kwargs):
+            super(SettingsWindow.button, self).__init__()
+            self.setText("Button Name")
+
+        def setButtonColor(self, color):
+            self.setStyleSheet('background-color: {}'.format(color))
+
+        def setButtonText(self, text):
+            self.setText(text)
+
+    def __init__(self):
+        super(SettingsWindow, self).__init__()
+        self.loadWindowSettings()
+        # self.loadComponents()
+        self.SWButtonSetup()
+        self.SWUI()
+
+    def loadWindowSettings(self):
+        self.width = 480
+        self.height = 320
+        self.bg_color = '#484848'
+        self.setStyleSheet('background-color: {}'.format(self.bg_color))
+        self.setGeometry(0, 0, self.width, self.height)
+        print("Window Settings Loaded")
+
+    def loadComponents(self):
+        self.kit = MotorKit(i2c=board.I2C())
+        self.adc = adc.ADS1115(0x48)
+        self.SM = Stepper(self.kit.stepper1)
+        self.valve = MOTOR(self.kit.motor3, "Valve")
+        self.pump = MOTOR(self.kit.motor4, "Pump")
+
+        self.valve.deactivate()
+        self.pump.deactivate()
+        self.SM.motor.release()
+        print("Components Loaded")
+
+    def SWButtonSetup(self):
+        self.b1 = self.button()
+        self.b1.setButtonText("Home")
+        self.b1.clicked.connect(lambda: self.showHW())
+
+    def showHW(self):
+        self.HW = HomeWindow()
+        self.HW.show()
+        self.close()
+
+    def SWUI(self):
+        self.layout = QGridLayout()
+
+        self.layout.addWidget(self.b1)
+        # self.layout.addWidget(self.b2)
+        # self.layout.addWidget(self.b3)
+        # self.layout.addWidget(self.b4)
+
+        self.setLayout(self.layout)
+
+
+class StartTestWindow(QWidget):
+    class button(QPushButton):
+        def __init__(self, *args, **kwargs):
+            super(StartTestWindow.button, self).__init__()
+            self.setText("Button Name")
+
+        def setButtonColor(self, color):
+            self.setStyleSheet('background-color: {}'.format(color))
+
+        def setButtonText(self, text):
+            self.setText(text)
+
+    def __init__(self):
+        super(StartTestWindow, self).__init__()
+        self.loadWindowSettings()
+        self.loadComponents()
+        self.sTWButtonSetup()
+        self.graphSetup()
+        self.STWUI()
+
+    def loadWindowSettings(self):
+        self.width = 480
+        self.height = 320
+        self.bg_color = '#484848'
+        self.setStyleSheet('background-color: {}'.format(self.bg_color))
+        self.setGeometry(0, 0, self.width, self.height)
+        print("Window Settings Loaded")
+
+    def loadComponents(self):
+        self.kit = MotorKit(i2c=board.I2C())
+        self.adc = adc.ADS1115(0x48)
+        self.SM = Stepper(self.kit.stepper1)
+        self.valve = MOTOR(self.kit.motor3, "Valve")
+        self.pump = MOTOR(self.kit.motor4, "Pump")
+
+        self.valve.deactivate()
+        self.pump.deactivate()
+        self.SM.motor.release()
+
+        print("Components Loaded")
+
+    def graphSetup(self):
+        self.sensorGraph = self.graph()
+
+        self.timeArray = []
+        self.sensor1Array = []
+        self.sensor2Array = []
+        self.sensor3Array = []
+
+        self.sensor1Plot = self.sensorGraph.plot(self.timeArray, self.sensor1Array, pen='r')
+        self.sensor2Plot = self.sensorGraph.plot(self.timeArray, self.sensor2Array, pen='g')
+        self.sensor3Plot = self.sensorGraph.plot(self.timeArray, self.sensor3Array, pen='b')
+
+    def STWButtonSetup(self):
+        self.b1 = self.button()
+        self.b1.setButtonText("Start")
+        self.b1.clicked.connect(lambda: self.initializeTest())
+
+        self.b2 = self.button()
+        self.b2.setButtonText("Stop")
+        self.b2.clicked.connect(lambda: self.stop())
+
+        self.b3 = self.button()
+        self.b3.setButtonText("Home")
+        self.b3.clicked.connect(lambda: self.showHW())
+
+    def showHW(self):
+        self.HW = HomeWindow()
+        self.HW.show()
+        self.close()
+
+    def initializeTest(self):
+        pass
+
+    def stop(self):
+        pass
+
+    def STWUI(self):
+        self.layout = QGridLayout()
+
+        self.layout.addWidget(self.sensorGraph)
+
+        self.layout.addWidget(self.b1)
+        self.layout.addWidget(self.b2)
+        self.layout.addWidget(self.b3)
+
+        self.setLayout(self.layout)
+
+
+class ControlPanelWindow(QWidget):
+    class button(QPushButton):
+        def __init__(self, *args, **kwargs):
+            super(ControlPanelWindow.button, self).__init__()
+            self.setText("Button Name")
+
+        def setButtonColor(self, color):
+            self.setStyleSheet('background-color: {}'.format(color))
+
+        def setButtonText(self, text):
+            self.setText(text)
+
+    def __init__(self):
+        super(ControlPanelWindow, self).__init__()
+        self.loadWindowSettings()
+        self.loadComponents()
+        self.CPWButtonSetup()
+        self.CPWUI()
+
+    def loadWindowSettings(self):
+        self.width = 480
+        self.height = 320
+        self.bg_color = '#484848'
+        self.setStyleSheet('background-color: {}'.format(self.bg_color))
+        self.setGeometry(0, 0, self.width, self.height)
+        print("Window Settings Loaded")
+
+    def loadComponents(self):
+        self.kit = MotorKit(i2c=board.I2C())
+        self.adc = adc.ADS1115(0x48)
+        self.SM = Stepper(self.kit.stepper1)
+        self.valve = MOTOR(self.kit.motor3, "Valve")
+        self.pump = MOTOR(self.kit.motor4, "Pump")
+
+        self.valve.deactivate()
+        self.pump.deactivate()
+        self.SM.motor.release()
+
+        print("Components Loaded")
+
+    def CPWButtonSetup(self):
+        self.b1 = self.button()
+        self.b1.setButtonText("Expose")
+        self.b1.clicked.connect(lambda: self.SM.expose())
+
+        self.b2 = self.button()
+        self.b2.setButtonText("Recover")
+        self.b2.clicked.connect(lambda: self.SM.recover())
+
+        self.b3 = self.button()
+        self.b3.setButtonText("<<")
+        self.b3.clicked.connect(lambda: self.SM.moveLeft())
+
+        self.b4 = self.button()
+        self.b4.setButtonText(">>")
+        self.b4.clicked.connect(lambda: self.SM.moveRight())
+
+        self.b5 = self.button()
+        self.b5.setButtonText("Toggle Valve")
+        self.b5.clicked.connect(lambda: self.valve.toggle())
+
+        self.b6 = self.button()
+        self.b6.setButtonText("Toggle Pump")
+        self.b6.clicked.connect(lambda: self.pump.toggle())
+
+        self.b7 = self.button()
+        self.b7.setButtonText("Zero Stepper Motor")
+        self.b7.clicked.connect(lambda: self.SM.zero())
+
+        self.b8 = self.button()
+        self.b8.setButtonText("Home")
+        self.b8.clicked.connect(lambda: self.showHW())
+
+    def showHW(self):
+        self.HW = HomeWindow()
+        self.HW.show()
+        self.close()
+
+    def CPWUI(self):
+        self.layout = QGridLayout()
+
+        self.layout.addWidget(self.b1)
+        self.layout.addWidget(self.b2)
+        self.layout.addWidget(self.b3)
+        self.layout.addWidget(self.b4)
+        self.layout.addWidget(self.b5)
+        self.layout.addWidget(self.b6)
+        self.layout.addWidget(self.b7)
+        self.layout.addWidget(self.b8)
+
+        self.setLayout(self.layout)
+
+
+class SensorGraphWindow(QWidget):
+    class button(QPushButton):
+        def __init__(self, *args, **kwargs):
+            super(SensorGraphWindow.button, self).__init__()
+            self.setText("Button Name")
+
+        def setButtonColor(self, color):
+            self.setStyleSheet('background-color: {}'.format(color))
+
+        def setButtonText(self, text):
+            self.setText(text)
+
+    def __init__(self):
+        super(SensorGraphWindow, self).__init__()
+        self.loadWindowSettings()
+        self.loadComponents()
+        self.HWButtonSetup()
+        self.graphSetup()
+        self.HWUI()
+
+    def loadWindowSettings(self):
+        self.width = 480
+        self.height = 320
+        self.bg_color = '#484848'
+        self.setStyleSheet('background-color: {}'.format(self.bg_color))
+        self.setGeometry(0, 0, self.width, self.height)
+        print("Window Settings Loaded")
+
+    def loadComponents(self):
+        self.kit = MotorKit(i2c=board.I2C())
+        self.adc = adc.ADS1115(0x48)
+        self.SM = Stepper(self.kit.stepper1)
+        self.valve = MOTOR(self.kit.motor3, "Valve")
+        self.pump = MOTOR(self.kit.motor4, "Pump")
+
+        self.valve.deactivate()
+        self.pump.deactivate()
+        self.SM.motor.release()
+        print("Components Loaded")
+
+    def graphSetup(self):
+        self.sensorGraph = self.graph()
+
+        self.timeArray = []
+        self.sensor1Array = []
+        self.sensor2Array = []
+        self.sensor3Array = []
+
+        self.sensor1Plot = self.sensorGraph.plot(self.timeArray, self.sensor1Array, pen='r')
+        self.sensor2Plot = self.sensorGraph.plot(self.timeArray, self.sensor2Array, pen='g')
+        self.sensor3Plot = self.sensorGraph.plot(self.timeArray, self.sensor3Array, pen='b')
+        self.liveGraph()
+
+    def liveGraph(self):
+        pass
+
+    def SGWButtonSetup(self):
+        self.b1 = self.button()
+        self.b1.setButtonText("Expose")
+        self.b1.clicked.connect(lambda: self.SM.expose())
+
+        self.b2 = self.button()
+        self.b2.setButtonText("Recover")
+        self.b2.clicked.connect(lambda: self.SM.recover())
+
+        self.b3 = self.button()
+        self.b3.setButtonText("Toggle Valve")
+        self.b3.clicked.connect(lambda: self.valve.toggle())
+
+        self.b4 = self.button()
+        self.b4.setButtonText("Toggle Pump")
+        self.b4.clicked.connect(lambda: self.pump.toggle())
+
+        self.b5 = self.button()
+        self.b5.setButtonText("Home")
+        self.b5.clicked.connect(lambda: self.showHW())
+
+    def showHW(self):
+        self.HW = HomeWindow()
+        self.HW.show()
+        self.close()
+
+    def SGWUI(self):
+        self.layout = QGridLayout()
+
+        self.layout.addWidget(self.b1)
+        self.layout.addWidget(self.b2)
+        self.layout.addWidget(self.b3)
+        self.layout.addWidget(self.b4)
+        self.layout.addWidget(self.b5)
+
+        self.setLayout(self.layout)
 
 def main():
     UI = HomeWindow()
