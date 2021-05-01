@@ -138,7 +138,7 @@ class HomeWindow(QWidget):
 
         self.valve.deactivate()
         self.pump.deactivate()
-        self.SM.release()
+        self.SM.motor.release()
         print("Components Loaded")
 
     def HWButtonSetup(self):
