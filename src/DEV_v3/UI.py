@@ -122,7 +122,7 @@ class HomeWindow(QWidget):
         self.loadWindowSettings()
         self.setStyleSheet('background-color: {}'.format(self.bg_color))
         self.setGeometry(0, 0, self.width, self.height)
-        self.loadComponents()
+        # self.loadComponents()
         self.HWButtonSetup()
         self.HWUI()
 
@@ -170,27 +170,27 @@ class HomeWindow(QWidget):
         self.b6.clicked.connect(lambda: QApplication.closeAllWindows())
 
     def showPW(self):
-        self.PW = self.PurgeWindow()
+        self.PW = PurgeWindow()
         self.PW.show()
         self.close()
 
     def showSW(self):
-        self.SW = self.SettingsWindow()
+        self.SW = SettingsWindow()
         self.SW.show()
         self.close()
 
     def showSTW(self):
-        self.STW = self.StartTestWindow()
+        self.STW = StartTestWindow()
         self.STW.show()
         self.close()
 
     def showCPW(self):
-        self.CPW = self.ControlPanelWindow()
+        self.CPW = ControlPanelWindow()
         self.CPW.show()
         self.close()
 
     def showSGW(self):
-        self.SGW = self.SensorGraphWindow()
+        self.SGW = SensorGraphWindow()
         self.SGW.show()
         self.close()
 
@@ -203,6 +203,99 @@ class HomeWindow(QWidget):
         self.layout.addWidget(self.b4)
         self.layout.addWidget(self.b5)
         self.layout.addWidget(self.b6)
+
+        self.setLayout(self.layout)
+
+
+class PurgeWindow(QWidget):
+    class button(QPushButton):
+        def __init__(self, *args, **kwargs):
+            super(PurgeWindow.button, self).__init__()
+            self.setText("Button Name")
+
+        def setButtonColor(self, color):
+            self.setStyleSheet('background-color: {}'.format(color))
+
+        def setButtonText(self, text):
+            self.setText(text)
+
+    def __init__(self):
+        super(PurgeWindow, self).__init__()
+        self.loadWindowSettings()
+        self.setStyleSheet('background-color: {}'.format(self.bg_color))
+        self.setGeometry(0, 0, self.width, self.height)
+        self.loadComponents()
+        self.PWButtonSetup()
+        self.PWUI()
+
+    def loadWindowSettings(self):
+        self.width = 480
+        self.height = 320
+        self.bg_color = '#484848'
+        print("Window Settings Loaded")
+
+    def loadComponents(self):
+        self.kit = MotorKit(i2c=board.I2C())
+        self.adc = adc.ADS1115(0x48)
+        self.SM = Stepper(self.kit.stepper1)
+        self.valve = MOTOR(self.kit.motor3, "Valve")
+        self.pump = MOTOR(self.kit.motor4, "Pump")
+
+        self.valve.deactivate()
+        self.pump.deactivate()
+        self.SM.motor.release()
+        print("Components Loaded")
+
+    def PWButtonSetup(self):
+        self.b1 = self.button()
+        self.b1.setButtonText("Purge")
+        self.b1.clicked.connect(lambda: self.purge())
+
+        self.b2 = self.button()
+        self.b2.setButtonText("Home")
+        self.b2.clicked.connect(lambda: self.showHW())
+
+        self.b3 = self.button()
+        self.b3.setButtonText("Control Panel")
+        self.b3.clicked.connect(lambda: self.showCPW())
+
+        self.b4 = self.button()
+        self.b4.setButtonText("Stop")
+        self.b4.clicked.connect(lambda: self.stop())
+
+        self.b5 = self.button()
+        self.b5.setButtonText("Start Test")
+        self.b5.clicked.connect(lambda: self.showSTW())
+
+    def showHW(self):
+        self.HW = HomeWindow()
+        self.HW.show()
+        self.close()
+
+    def showSW(self):
+        self.SW = ControlPanelWindow()
+        self.SW.show()
+        self.close()
+
+    def showSTW(self):
+        self.STW = StartTestWindow()
+        self.STW.show()
+        self.close()
+
+    def purge(self):
+        pass
+
+    def stop(self):
+        pass
+
+    def PWUI(self):
+        self.layout = QGridLayout()
+
+        self.layout.addWidget(self.b1)
+        self.layout.addWidget(self.b2)
+        self.layout.addWidget(self.b3)
+        self.layout.addWidget(self.b4)
+        self.layout.addWidget(self.b5)
 
         self.setLayout(self.layout)
 
