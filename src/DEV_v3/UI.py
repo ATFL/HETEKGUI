@@ -272,9 +272,9 @@ class PurgeWindow(QWidget):
         self.HW.show()
         self.close()
 
-    def showSW(self):
-        self.SW = ControlPanelWindow()
-        self.SW.show()
+    def showCPW(self):
+        self.CPW = ControlPanelWindow()
+        self.CPW.show()
         self.close()
 
     def showSTW(self):
