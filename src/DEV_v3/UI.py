@@ -118,6 +118,7 @@ class HomeWindow(QWidget):
             self.setText(text)
 
     def __init__(self):
+        super(HomeWindow, self).__init__()
         self.loadWindowSettings()
         self.setStyleSheet('background-color: {}'.format(self.bg_color))
         self.setGeometry(0, 0, self.width, self.height)
