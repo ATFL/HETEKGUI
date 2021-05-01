@@ -122,6 +122,8 @@ class HomeWindow(QWidget):
         self.setStyleSheet('background-color: {}'.format(self.bg_color))
         self.setGeometry(0, 0, self.width, self.height)
         self.loadComponents()
+        self.HWButtonSetup()
+        self.HWUI()
 
     def loadWindowSettings(self):
         self.width = 480
@@ -202,3 +204,14 @@ class HomeWindow(QWidget):
         self.layout.addWidget(self.b6)
 
         self.setLayout(self.layout)
+
+
+
+def main():
+    UI = HomeWindow()
+    UI.show()
+    sys.exit(app.exec_())
+
+
+if __name__ == "__main__":
+    main()
