@@ -41,7 +41,7 @@ class Stepper(QWidget):
         self.motor = channel
         self.currentPos = 0
         self.stepDirection = stepper.FORWARD
-        self.stepStyle = stepper.DOUBLE
+        self.stepStyle = stepper.SINGLE
         self.motor.release()
         self.stepperMinVal = -20
         self.stepperMaxVal = 140
