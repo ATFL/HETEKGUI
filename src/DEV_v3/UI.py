@@ -41,7 +41,7 @@ class Stepper(QWidget):
         self.motor = channel
         self.currentPos = 0
         self.stepDirection = stepper.FORWARD
-        self.stepStyle = stepper.SINGLE
+        self.stepStyle = stepper.DOUBLE
         self.motor.release()
         self.stepperMinVal = -20
         self.stepperMaxVal = 140
@@ -224,6 +224,9 @@ class PurgeWindow(QWidget):
         self.loadWindowSettings()
         self.loadComponents()
         self.PWButtonSetup()
+        self.purgeTimer = QTimer()
+        self.purge1Time = 20
+        self.purge2Time = 10
         self.PWUI()
 
     def loadWindowSettings(self):
@@ -283,10 +286,23 @@ class PurgeWindow(QWidget):
         self.close()
 
     def purge(self):
-        pass
+        self.pump.activate()
+        self.valve.activate()
+        self.purgeTimer.timeout.connect(self.purge2())
+        self.purgeTimer.start(self.purge1Time)
+
+    def purge2(self):
+        self.purgeTimer.stop()
+        self.SM.expose()
+        self.purgeTimer.timeout.connect(self.stop())
+        self.purgeTimer.start(self.purge2Time)
 
     def stop(self):
-        pass
+        if self.purgeTimer.isActive():
+            self.purgeTimer.stop()
+        self.pump.deactivate()
+        self.valve.deactivate()
+        self.SM.recover()
 
     def PWUI(self):
         self.layout = QGridLayout()
