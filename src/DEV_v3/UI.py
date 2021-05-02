@@ -576,6 +576,9 @@ class SensorGraphWindow(QWidget):
         self.loadComponents()
         self.SGWButtonSetup()
         self.graphSetup()
+
+        self.graphTimer = QTimer()
+        self.graphTimer.timeout.connect(lambda: self.liveGraph())
         self.SGWUI()
 
     def loadWindowSettings(self):
@@ -601,18 +604,28 @@ class SensorGraphWindow(QWidget):
     def graphSetup(self):
         self.sensorGraph = graph()
 
-        self.timeArray = []
-        self.sensor1Array = []
-        self.sensor2Array = []
-        self.sensor3Array = []
+        self.timeArray = list(range(200))
+        self.sensor1Array = [0 for _ in range(200)]
+        self.sensor2Array = [0 for _ in range(200)]
+        self.sensor3Array = [0 for _ in range(200)]
 
         self.sensor1Plot = self.sensorGraph.plot(self.timeArray, self.sensor1Array, pen='r')
         self.sensor2Plot = self.sensorGraph.plot(self.timeArray, self.sensor2Array, pen='g')
         self.sensor3Plot = self.sensorGraph.plot(self.timeArray, self.sensor3Array, pen='b')
-        self.liveGraph()
+        self.graphTimer.start(100)
 
     def liveGraph(self):
-        pass
+        self.sensor1Array = self.sensor1Array[1:]
+        self.sensor2Array = self.sensor2Array[1:]
+        self.sensor3Array = self.sensor3Array[1:]
+
+        self.sensor1Array.append(self.sensor1.read())
+        self.sensor2Array.append(self.sensor2.read())
+        self.sensor3Array.append(self.sensor3.read())
+
+        self.sensor1Plot.setData(self.timeArray, self.sensor1Array)
+        self.sensor2Plot.setData(self.timeArray, self.sensor2Array)
+        self.sensor3Plot.setData(self.timeArray, self.sensor3Array)
 
     def SGWButtonSetup(self):
         self.b1 = self.button()
@@ -636,6 +649,7 @@ class SensorGraphWindow(QWidget):
         self.b5.clicked.connect(lambda: self.showHW())
 
     def showHW(self):
+        self.graphTimer.stop()
         self.HW = HomeWindow()
         self.HW.show()
         self.close()
