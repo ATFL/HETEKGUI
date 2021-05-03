@@ -234,8 +234,8 @@ class PurgeWindow(QWidget):
         self.PWButtonSetup()
         self.purgeTimer = QTimer()
         self.purgeTimer2 = QTimer()
-        self.purgeTimer.isSingleShot(True)
-        self.purgeTimer2.isSingleShot(True)
+        self.purgeTimer.setSingleShot(True)
+        self.purgeTimer2.setSingleShot(True)
         self.purgeTimer.timeout.connect(lambda: self.SM.expose())
         self.purgeTimer2.timeout.connect(lambda: self.stop())
         self.purge1Time = 5000 # normally 20000
