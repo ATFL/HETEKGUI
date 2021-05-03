@@ -457,7 +457,7 @@ class StartTestWindow(QWidget):
     def STWButtonSetup(self):
         self.b1 = self.button()
         self.b1.setButtonText("Start")
-        self.b1.clicked.connect(lambda: self.collectSample())
+        self.b1.clicked.connect(lambda: self.initializeTest())
 
         self.b2 = self.button()
         self.b2.setButtonText("Stop")
