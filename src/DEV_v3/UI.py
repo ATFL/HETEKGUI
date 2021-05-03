@@ -233,8 +233,10 @@ class PurgeWindow(QWidget):
         self.loadComponents()
         self.PWButtonSetup()
         self.purgeTimer = QTimer()
-        self.purge1Time = 20000
-        self.purge2Time = 10000
+        self.purgeTimer2 = QTimer()
+
+        self.purge1Time = 20000 # normally 20000
+        self.purge2Time = 10000 # normally 10000
         self.PWUI()
 
     def loadWindowSettings(self):
@@ -296,11 +298,15 @@ class PurgeWindow(QWidget):
     def purge(self):
         self.pump.activate()
         self.valve.activate()
-        self.purgeTimer.timeout.connect(lambda: self.purge2())
+        self.purgeTimer.timeout.connect(lambda: self.SM.expose())
+        self.purgeTimer.isSingleShot(True)
+
+        self.purgeTimer2.timeout.connect(lambda: self.SM.recover())
+        self.purgeTimer2.isSingleShot(True)
         self.purgeTimer.start(self.purge1Time)
 
+
     def purge2(self):
-        self.purgeTimer.stop()
         self.SM.expose()
         self.purgeTimer.disconnect()
         self.purgeTimer.timeout.connect(lambda: self.stop())
@@ -308,6 +314,8 @@ class PurgeWindow(QWidget):
 
     def stop(self):
         if self.purgeTimer.isActive():
+            self.purgeTimer.stop()
+        if self.purgeTimer2.isActive():
             self.purgeTimer.stop()
         self.pump.deactivate()
         self.valve.deactivate()
@@ -513,36 +521,6 @@ class StartTestWindow(QWidget):
 
         self.endTimer.timeout.connect(lambda: self.stop())
         self.endTimer.start(self.endTestTime)
-
-    # def dc_p1(self):
-    #     print("dc p1")
-    #     self.pump.deactivate()
-    #     self.valve.deactivate()
-    #     self.dataTimer.stop()
-    #     self.graphSetup()
-    #
-    #     self.dataTimer.start(100)
-    #     self.testTimer = QTimer()
-    #     self.testTimer.timeout.connect(lambda: self.dc_p2)
-    #     self.testTimer.setSingleShot(True)
-    #     self.testTimer.start(self.exposeTime)
-    #
-    # def dc_p2(self):
-    #     print("dc p2")
-    #
-    #     self.testTimer = QTimer()
-    #     self.testTimer.timeout.connect(lambda: self.dc_p3)
-    #     self.testTimer.setSingleShot(True)
-    #     self.SM.expose()
-    #     self.testTimer.start(self.recoverTime)
-    #
-    # def dc_p3(self):
-    #     print("dc p3")
-    #     self.testTimer = QTimer()
-    #     self.testTimer.timeout.connect(lambda: self.stop())
-    #     self.testTimer.setSingleShot(True)
-    #     self.SM.recover()
-    #     self.testTimer.start(self.endTestTime)
 
     def updateData(self):
         self.timeArray.append(self.timeArray[-1] + 0.1)
