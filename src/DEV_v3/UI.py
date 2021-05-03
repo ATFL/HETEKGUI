@@ -233,8 +233,8 @@ class PurgeWindow(QWidget):
         self.loadComponents()
         self.PWButtonSetup()
         self.purgeTimer = QTimer()
-        self.purge1Time = 20
-        self.purge2Time = 10
+        self.purge1Time = 20000
+        self.purge2Time = 10000
         self.PWUI()
 
     def loadWindowSettings(self):
