@@ -481,6 +481,7 @@ class StartTestWindow(QWidget):
         self.SM.recover()
         self.pump.activate()
         self.valve.activate()
+        self.testTimer.isSingleShot(True)
         self.testTimer.timeout.connect(lambda: self.dc_p1())
         self.testTimer.start(self.sampleCollectTime)
         self.dataTimer.start(100)
@@ -494,29 +495,28 @@ class StartTestWindow(QWidget):
         self.pump.deactivate()
         self.valve.deactivate()
         self.dataTimer.stop()
-        self.testTimer.stop()
         self.graphSetup()
 
         self.dataTimer.start(100)
-        self.testTimer = QTimer()
+        self.testTimer.disconnect(lambda: self.dc_p1())
         self.testTimer.timeout.connect(lambda: self.dc_p2)
+        self.testTimer.isSingleShot(True)
         self.testTimer.start(self.exposeTime)
 
     def dc_p2(self):
         print("dc p2")
-        self.testTimer.stop()
-        self.testTimer = QTimer
-        self.testTimer.timeout.connect(lambda: self.dc_p3)
 
+        self.testTimer.timeout.disconnect(lambda: self.dc_p2)
+        self.testTimer.timeout.connect(lambda: self.dc_p3)
+        self.testTimer.isSingleShot(True)
         self.SM.expose()
         self.testTimer.start(self.recoverTime)
 
     def dc_p3(self):
         print("dc p3")
-        self.testTimer.stop()
-        self.testTimer = QTimer()
+        self.testTimer.timeout.disconnect(lambda: self.dc_p3)
         self.testTimer.timeout.connect(lambda: self.stop())
-
+        self.testTimer.isSingleShot(True)
         self.SM.recover()
         self.testTimer.start(self.endTestTime)
 
@@ -557,7 +557,7 @@ class StartTestWindow(QWidget):
     def saveData(self):
         self.filenameTotal = self.dataPath + self.filename
         self.stackedArray = [self.timeArray, self.sensor1Array, self.sensor2Array, self.sensor3Array]
-        np.savetxt(self.filename, self.stackedArray, fmt='%.10f', delimiter=',')
+        np.savetxt(self.filenameTotal, self.stackedArray, fmt='%.10f', delimiter=',')
         self.saveMessageEnd = QMessageBox()
         self.saveMessageEnd.setIcon(QMessageBox.Information)
         self.saveMessageEnd.setText("Saved")
