@@ -202,6 +202,18 @@ class HomeWindow(QWidget):
         self.SGW.show()
         self.close()
 
+    def exitFunction(self):
+        self.exitMsg = QMessageBox()
+        self.exitMsg.setText("Do you Want to shutdown?")
+        self.exitMsg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        self.em = self.exitMsg.exec()
+        if self.em == QMessageBox.Yes:
+            QApplication.closeAllWindows()
+            os.system("sudo shutdown now")
+        else:
+            QApplication.closeAllWindows()
+
+
     def HWUI(self):
         self.layout = QGridLayout()
 
