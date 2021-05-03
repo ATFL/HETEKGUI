@@ -409,12 +409,18 @@ class StartTestWindow(QWidget):
 
         self.sampleCollectTime = 5000 # normally 20000
         self.exposeTime = 5000 # normally 10000
-        self.recoverTime = 5000 # normally 40000
-        self.endTestTime = 5000 # normally 70000
+        self.recoverTime = 10000 # normally 50000
+        self.endTestTime = 15000 # normally 120000
 
         self.testTimer = QTimer()
         self.dataTimer = QTimer()
+        self.exposeTimer = QTimer()
+        self.recoveryTimer = QTimer()
+        self.endTimer = QTimer()
         self.dataTimer.timeout.connect(lambda: self.updateData())
+        self.exposeTimer.setSingleShot(True)
+        self.recoveryTimer.setSingleShot(True)
+        self.endTimer.setSingleShot(True)
 
         self.STWUI()
 
@@ -482,7 +488,7 @@ class StartTestWindow(QWidget):
         self.pump.activate()
         self.valve.activate()
         self.testTimer.setSingleShot(True)
-        self.testTimer.timeout.connect(lambda: self.dc_p1())
+        self.testTimer.timeout.connect(lambda: self.data_collect())
         self.testTimer.start(self.sampleCollectTime)
         self.dataTimer.start(100)
         self.b1.setDisabled(True)
@@ -490,35 +496,53 @@ class StartTestWindow(QWidget):
         self.b3.setDisabled(True)
         print("Initialize Text")
 
-    def dc_p1(self):
-        print("dc p1")
+    def data_collect(self):
+        print("Running Test, new data collecting")
         self.pump.deactivate()
         self.valve.deactivate()
         self.dataTimer.stop()
         self.graphSetup()
 
         self.dataTimer.start(100)
-        self.testTimer = QTimer()
-        self.testTimer.timeout.connect(lambda: self.dc_p2)
-        self.testTimer.setSingleShot(True)
-        self.testTimer.start(self.exposeTime)
 
-    def dc_p2(self):
-        print("dc p2")
+        self.exposeTimer.timeout.connect(lambda: self.SM.expose())
+        self.exposeTimer.start(self.exposeTime)
 
-        self.testTimer = QTimer()
-        self.testTimer.timeout.connect(lambda: self.dc_p3)
-        self.testTimer.setSingleShot(True)
-        self.SM.expose()
-        self.testTimer.start(self.recoverTime)
+        self.recoveryTimer.timeout.connect(lambda: self.SM.recover())
+        self.recoveryTimer.start(self.recoverTime)
 
-    def dc_p3(self):
-        print("dc p3")
-        self.testTimer = QTimer()
-        self.testTimer.timeout.connect(lambda: self.stop())
-        self.testTimer.setSingleShot(True)
-        self.SM.recover()
-        self.testTimer.start(self.endTestTime)
+        self.endTimer.timeout.connect(lambda: self.SM.expose())
+        self.endTimer.start(self.endTestTime)
+
+    # def dc_p1(self):
+    #     print("dc p1")
+    #     self.pump.deactivate()
+    #     self.valve.deactivate()
+    #     self.dataTimer.stop()
+    #     self.graphSetup()
+    #
+    #     self.dataTimer.start(100)
+    #     self.testTimer = QTimer()
+    #     self.testTimer.timeout.connect(lambda: self.dc_p2)
+    #     self.testTimer.setSingleShot(True)
+    #     self.testTimer.start(self.exposeTime)
+    #
+    # def dc_p2(self):
+    #     print("dc p2")
+    #
+    #     self.testTimer = QTimer()
+    #     self.testTimer.timeout.connect(lambda: self.dc_p3)
+    #     self.testTimer.setSingleShot(True)
+    #     self.SM.expose()
+    #     self.testTimer.start(self.recoverTime)
+    #
+    # def dc_p3(self):
+    #     print("dc p3")
+    #     self.testTimer = QTimer()
+    #     self.testTimer.timeout.connect(lambda: self.stop())
+    #     self.testTimer.setSingleShot(True)
+    #     self.SM.recover()
+    #     self.testTimer.start(self.endTestTime)
 
     def updateData(self):
         self.timeArray.append(self.timeArray[-1] + 0.1)
@@ -538,6 +562,12 @@ class StartTestWindow(QWidget):
             self.testTimer.stop()
         if self.dataTimer.isActive():
             self.dataTimer.stop()
+        if self.exposeTimer.isActive():
+            self.exposeTimer.stop()
+        if self.recoveryTimer.isActive():
+            self.recoveryTimer.stop()
+        if self.endTimer.isActive():
+            self.endTimer.stop()
 
         self.filename = "d3v3_{}.csv".format(datetime.now().strftime('%m%d%H%M%S'))
         self.save = self.askSave()
