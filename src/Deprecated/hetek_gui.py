@@ -334,7 +334,7 @@ class mainWindow(QWidget):
 		self.sensor2Vector = []
 		self.minArray = []
 		self.dataArray = []
-		self.plot.setData(self.timeVector, self.sensor1Vector)
+		self.plot.setData(self.timeVector, 1self.sensorVector)
 		self.plot2.setData(self.timeVector, self.sensor2Vector)
 
 	def fn_valve(self, status):

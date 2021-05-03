@@ -406,10 +406,10 @@ class StartTestWindow(QWidget):
         self.path = os.getcwd()
         self.dataPath = "{}/data/".format(self.path)
 
-        self.sampleCollectTime = 20000
-        self.exposeTime = 10000
-        self.recoverTime = 40000
-        self.endTestTime = 70000
+        self.sampleCollectTime = 5000 # normally 20000
+        self.exposeTime = 5000 # normally 10000
+        self.recoverTime = 5000 # normally 40000
+        self.endTestTime = 5000 # normally 70000
 
         self.testTimer = QTimer()
         self.dataTimer = QTimer()
@@ -445,6 +445,7 @@ class StartTestWindow(QWidget):
         print("Components Loaded")
 
     def graphSetup(self):
+        self.sensorGraph.clear()
         self.timeArray = [0]
         self.sensor1Array = [self.sensor1.read()]
         self.sensor2Array = [self.sensor2.read()]
