@@ -529,14 +529,29 @@ class StartTestWindow(QWidget):
         if self.dataTimer.isActive():
             self.dataTimer.stop()
 
-        self.saveMsg = self.showMessage("Do you want to save the data?")
+        self.filename = "d3v3_{}".format(datetime.now().strftime('%m%d%H%M%S'))
+        self.save = self.askSave()
+        if self.save == QMessageBox.Ok:
+            self.saveData()
         self.b3.setDisabled(False)
 
+    def askSave(self):
+        self.saveMsg = QMessageBox()
+        self.saveMsg.setIcon(QMessageBox.Information)
+        self.saveMsg.setText("Do you want to save the data?")
+        self.saveMsg.setInformativeText("File will be saved as: {}".format(self.filename))
+        self.saveMsg.setWindowTitle("Save Data")
+        self.saveMsg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        return self.saveMsg.exec()
+
     def saveData(self):
-        self.filename = "d3v3_{}".format(datetime.now().strftime('%m%d%H%M%S'))
         self.stackedArray = [self.timeArray, self.sensor1Array, self.sensor2Array, self.sensor3Array]
         np.savetxt(self.filename, self.stackedArray, fmt='%.10f', delimiter=',')
-        self.showMessage("File saved as: {}".format(self.filename))
+        self.saveMessageEnd = QMessageBox()
+        self.saveMessageEnd.setIcon(QMessageBox.Information)
+        self.saveMessageEnd.setText("Saved")
+        self.saveMessageEnd.setInformativeText("File Saved as: {}".format(self.filename))
+        self.saveMessageEnd.setStandardButtons(QMessageBox.Ok)
 
     def STWUI(self):
         self.layout = QGridLayout()
@@ -755,6 +770,7 @@ class SensorGraphWindow(QWidget):
         self.layout.addWidget(self.b5)
 
         self.setLayout(self.layout)
+
 
 def main():
     UI = HomeWindow()
