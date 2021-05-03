@@ -296,13 +296,13 @@ class PurgeWindow(QWidget):
     def purge(self):
         self.pump.activate()
         self.valve.activate()
-        self.purgeTimer.timeout.connect(self.purge2())
+        self.purgeTimer.timeout.connect(lambda: self.purge2())
         self.purgeTimer.start(self.purge1Time)
 
     def purge2(self):
         self.purgeTimer.stop()
         self.SM.expose()
-        self.purgeTimer.timeout.connect(self.stop())
+        self.purgeTimer.timeout.connect(lambda: self.stop())
         self.purgeTimer.start(self.purge2Time)
 
     def stop(self):
