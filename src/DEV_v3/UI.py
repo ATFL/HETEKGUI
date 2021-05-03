@@ -687,10 +687,11 @@ class SensorGraphWindow(QWidget):
         self.loadWindowSettings()
         self.loadComponents()
         self.SGWButtonSetup()
-        self.graphSetup()
 
         self.graphTimer = QTimer()
         self.graphTimer.timeout.connect(lambda: self.liveGraph())
+
+        self.graphSetup()
         self.SGWUI()
 
     def loadWindowSettings(self):
