@@ -45,29 +45,37 @@ class Stepper(QWidget):
         self.motor.release()
         self.stepperMinVal = -20
         self.stepperMaxVal = 140
+        self.stepperPos = "Recover"
 
     def expose(self):
-        self.stepDirection = stepper.FORWARD
-        print("Exposing")
-        self.step(110)
+        if not self.stepperPos == "exposed":
+            self.stepDirection = stepper.FORWARD
+            print("Exposing")
+            self.step(110)
+            self.stepperPos = "exposed"
 
     def recover(self):
-        self.stepDirection = stepper.BACKWARD
-        self.step(110)
-        print("Recovering")
+        if not self.stepperPos == "recovered":
+            self.stepDirection = stepper.BACKWARD
+            self.step(110)
+            print("Recovering")
+            self.stepperPos = "recovered"
 
     def moveLeft(self):
         self.stepDirection = stepper.FORWARD
         self.step(2)
         print("<<")
+        self.stepperPos = "mid"
 
     def moveRight(self):
         self.stepDirection = stepper.BACKWARD
         self.step(2)
         print(">>")
+        self.stepperPos = "mid"
 
     def zero(self):
         self.currentPos = 0
+        self.stepperPos = "recovered"
 
     def step(self, steps):
         for i in range(steps):
@@ -394,6 +402,19 @@ class StartTestWindow(QWidget):
         self.loadComponents()
         self.STWButtonSetup()
         self.graphSetup()
+
+        self.path = os.getcwd()
+        self.dataPath = "{}/data/".format(self.path)
+
+        self.sampleCollectTime = 20000
+        self.exposeTime = 10000
+        self.recoverTime = 40000
+        self.endTestTime = 70000
+
+        self.testTimer = QTimer()
+        self.dataTimer = QTimer()
+        self.dataTimer.timeout.connect(lambda: self.updateData())
+
         self.STWUI()
 
     def loadWindowSettings(self):
@@ -415,15 +436,19 @@ class StartTestWindow(QWidget):
         self.pump.deactivate()
         self.SM.motor.release()
 
+        self.sensor1 = MOS(self.adc, 0)
+        self.sensor2 = MOS(self.adc, 1)
+        self.sensor3 = MOS(self.adc, 2)
+
+        self.sensorGraph = graph()
+
         print("Components Loaded")
 
     def graphSetup(self):
-        self.sensorGraph = graph()
-
-        self.timeArray = []
-        self.sensor1Array = []
-        self.sensor2Array = []
-        self.sensor3Array = []
+        self.timeArray = [0]
+        self.sensor1Array = [self.sensor1.read()]
+        self.sensor2Array = [self.sensor2.read()]
+        self.sensor3Array = [self.sensor3.read()]
 
         self.sensor1Plot = self.sensorGraph.plot(self.timeArray, self.sensor1Array, pen='r')
         self.sensor2Plot = self.sensorGraph.plot(self.timeArray, self.sensor2Array, pen='g')
@@ -432,11 +457,12 @@ class StartTestWindow(QWidget):
     def STWButtonSetup(self):
         self.b1 = self.button()
         self.b1.setButtonText("Start")
-        self.b1.clicked.connect(lambda: self.initializeTest())
+        self.b1.clicked.connect(lambda: self.collectSample())
 
         self.b2 = self.button()
         self.b2.setButtonText("Stop")
         self.b2.clicked.connect(lambda: self.stop())
+        self.b2.setDisabled(True)
 
         self.b3 = self.button()
         self.b3.setButtonText("Home")
@@ -448,10 +474,69 @@ class StartTestWindow(QWidget):
         self.close()
 
     def initializeTest(self):
-        pass
+        # Collect Sample
+        self.SM.recover()
+        self.pump.activate()
+        self.valve.activate()
+        self.testTimer.timeout.connect(lambda: self.dc_p1())
+        self.testTimer.start(self.sampleCollectTime)
+        self.dataTimer.start(100)
+        self.b1.setDisabled(True)
+        self.b2.setDisabled(False)
+        self.b3.setDisabled(True)
+
+    def dc_p1(self):
+        self.pump.deactivate()
+        self.valve.deactivate()
+        self.dataTimer.stop()
+        self.testTimer.stop()
+        self.graphSetup()
+
+        self.dataTimer.start(100)
+        self.testTimer.timeout.connect(lambda: self.dc_p2)
+        self.testTimer.start(self.exposeTime)
+
+    def dc_p2(self):
+        self.testTimer.stop()
+        self.testTimer.timeout.connect(lambda: self.dc_p3)
+
+        self.SM.expose()
+        self.testTimer.start(self.recoverTime)
+
+    def dc_p3(self):
+        self.testTimer.stop()
+        self.testTimer.timeout.connect(lambda: self.stop())
+
+        self.SM.recover()
+        self.testTimer.start(self.endTestTime)
+
+    def updateData(self):
+        self.timeArray.append(self.timeArray[-1] + 0.1)
+        self.sensor1Array.append(self.sensor1.read())
+        self.sensor2Array.append(self.sensor2.read())
+        self.sensor3Array.append(self.sensor3.read())
+
+        self.sensor1Plot.setData(self.timeArray, self.sensor1Array)
+        self.sensor2Plot.setData(self.timeArray, self.sensor2Array)
+        self.sensor3Plot.setData(self.timeArray, self.sensor3Array)
 
     def stop(self):
-        pass
+        self.pump.deactivate()
+        self.valve.deactivate()
+        self.SM.recover()
+        if self.testTimer.isActive():
+            self.testTimer.stop()
+        if self.dataTimer.isActive():
+            self.dataTimer.stop()
+
+        self.saveMsg = self.showMessage("Do you want to save the data?")
+        self.b3.setDisabled(False)
+
+    def saveData(self):
+        self.filename = "d3v3_{}".format(datetime.now().strftime('%m%d%H%M%S'))
+        self.stackedArray = [self.timeArray, self.sensor1Array, self.sensor2Array, self.sensor3Array]
+        np.savetxt(self.filename, self.stackedArray, fmt='%.10f', delimiter=',')
+        self.showMessage("File saved as: {}".format(self.filename))
 
     def STWUI(self):
         self.layout = QGridLayout()
@@ -599,6 +684,11 @@ class SensorGraphWindow(QWidget):
         self.valve.deactivate()
         self.pump.deactivate()
         self.SM.motor.release()
+
+        self.sensor1 = MOS(self.adc, 0)
+        self.sensor2 = MOS(self.adc, 1)
+        self.sensor3 = MOS(self.adc, 2)
+
         print("Components Loaded")
 
     def graphSetup(self):
