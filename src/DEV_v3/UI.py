@@ -481,7 +481,7 @@ class StartTestWindow(QWidget):
         self.SM.recover()
         self.pump.activate()
         self.valve.activate()
-        self.testTimer.isSingleShot(True)
+        self.testTimer.setSingleShot(True)
         self.testTimer.timeout.connect(lambda: self.dc_p1())
         self.testTimer.start(self.sampleCollectTime)
         self.dataTimer.start(100)
@@ -500,7 +500,7 @@ class StartTestWindow(QWidget):
         self.dataTimer.start(100)
         self.testTimer.disconnect(lambda: self.dc_p1())
         self.testTimer.timeout.connect(lambda: self.dc_p2)
-        self.testTimer.isSingleShot(True)
+        self.testTimer.setSingleShot(True)
         self.testTimer.start(self.exposeTime)
 
     def dc_p2(self):
@@ -508,7 +508,7 @@ class StartTestWindow(QWidget):
 
         self.testTimer.timeout.disconnect(lambda: self.dc_p2)
         self.testTimer.timeout.connect(lambda: self.dc_p3)
-        self.testTimer.isSingleShot(True)
+        self.testTimer.setSingleShot(True)
         self.SM.expose()
         self.testTimer.start(self.recoverTime)
 
@@ -516,7 +516,7 @@ class StartTestWindow(QWidget):
         print("dc p3")
         self.testTimer.timeout.disconnect(lambda: self.dc_p3)
         self.testTimer.timeout.connect(lambda: self.stop())
-        self.testTimer.isSingleShot(True)
+        self.testTimer.setSingleShot(True)
         self.SM.recover()
         self.testTimer.start(self.endTestTime)
 
