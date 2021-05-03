@@ -490,6 +490,7 @@ class StartTestWindow(QWidget):
         print("Initialize Text")
 
     def dc_p1(self):
+        print("dc p1")
         self.pump.deactivate()
         self.valve.deactivate()
         self.dataTimer.stop()
@@ -497,28 +498,27 @@ class StartTestWindow(QWidget):
         self.graphSetup()
 
         self.dataTimer.start(100)
-        self.testTimer.disconnect()
+        self.testTimer = QTimer()
         self.testTimer.timeout.connect(lambda: self.dc_p2)
         self.testTimer.start(self.exposeTime)
-        print("dc p1")
 
     def dc_p2(self):
+        print("dc p2")
         self.testTimer.stop()
-        self.testTimer.disconnect()
+        self.testTimer = QTimer
         self.testTimer.timeout.connect(lambda: self.dc_p3)
 
         self.SM.expose()
         self.testTimer.start(self.recoverTime)
-        print("dc p2")
 
     def dc_p3(self):
+        print("dc p3")
         self.testTimer.stop()
-        self.testTimer.disconnect()
+        self.testTimer = QTimer()
         self.testTimer.timeout.connect(lambda: self.stop())
 
         self.SM.recover()
         self.testTimer.start(self.endTestTime)
-        print("dc p3")
 
     def updateData(self):
         self.timeArray.append(self.timeArray[-1] + 0.1)
