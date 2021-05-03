@@ -498,7 +498,7 @@ class StartTestWindow(QWidget):
         self.graphSetup()
 
         self.dataTimer.start(100)
-        self.testTimer.disconnect(lambda: self.dc_p1())
+        self.testTimer.disconnect()
         self.testTimer.timeout.connect(lambda: self.dc_p2)
         self.testTimer.setSingleShot(True)
         self.testTimer.start(self.exposeTime)
@@ -506,7 +506,7 @@ class StartTestWindow(QWidget):
     def dc_p2(self):
         print("dc p2")
 
-        self.testTimer.timeout.disconnect(lambda: self.dc_p2)
+        self.testTimer.timeout.disconnect()
         self.testTimer.timeout.connect(lambda: self.dc_p3)
         self.testTimer.setSingleShot(True)
         self.SM.expose()
@@ -514,7 +514,7 @@ class StartTestWindow(QWidget):
 
     def dc_p3(self):
         print("dc p3")
-        self.testTimer.timeout.disconnect(lambda: self.dc_p3)
+        self.testTimer.timeout.disconnect()
         self.testTimer.timeout.connect(lambda: self.stop())
         self.testTimer.setSingleShot(True)
         self.SM.recover()
