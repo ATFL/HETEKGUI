@@ -302,6 +302,7 @@ class PurgeWindow(QWidget):
     def purge2(self):
         self.purgeTimer.stop()
         self.SM.expose()
+        self.purgeTimer.disconnect()
         self.purgeTimer.timeout.connect(lambda: self.stop())
         self.purgeTimer.start(self.purge2Time)
 
@@ -495,13 +496,15 @@ class StartTestWindow(QWidget):
         self.testTimer.stop()
         self.graphSetup()
 
-        # self.dataTimer.start(100)
-        # self.testTimer.timeout.connect(lambda: self.dc_p2)
-        # self.testTimer.start(self.exposeTime)
+        self.dataTimer.start(100)
+        self.testTimer.disconnect()
+        self.testTimer.timeout.connect(lambda: self.dc_p2)
+        self.testTimer.start(self.exposeTime)
         print("dc p1")
 
     def dc_p2(self):
         self.testTimer.stop()
+        self.testTimer.disconnect()
         self.testTimer.timeout.connect(lambda: self.dc_p3)
 
         self.SM.expose()
@@ -510,6 +513,7 @@ class StartTestWindow(QWidget):
 
     def dc_p3(self):
         self.testTimer.stop()
+        self.testTimer.disconnect()
         self.testTimer.timeout.connect(lambda: self.stop())
 
         self.SM.recover()
