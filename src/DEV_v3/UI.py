@@ -79,12 +79,11 @@ class Stepper(QWidget):
 
     def step(self, steps):
         for i in range(steps):
-            if self.stepperMinVal < self.currentPos < self.stepperMaxVal:
-                QTimer.singleShot(10, lambda: self.motor.onestep(direction=self.stepDirection, style=self.stepStyle))
-                if self.stepDirection == stepper.FORWARD:
-                    self.currentPos = self.currentPos + 1
-                else:
-                    self.currentPos = self.currentPos - 1
+            QTimer.singleShot(10, lambda: self.motor.onestep(direction=self.stepDirection, style=self.stepStyle))
+            if self.stepDirection == stepper.FORWARD:
+                self.currentPos = self.currentPos + 1
+            else:
+                self.currentPos = self.currentPos - 1
         self.motor.release()
 
 
