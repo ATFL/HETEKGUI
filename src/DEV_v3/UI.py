@@ -495,9 +495,9 @@ class StartTestWindow(QWidget):
         self.testTimer.stop()
         self.graphSetup()
 
-        self.dataTimer.start(100)
-        self.testTimer.timeout.connect(lambda: self.dc_p2)
-        self.testTimer.start(self.exposeTime)
+        # self.dataTimer.start(100)
+        # self.testTimer.timeout.connect(lambda: self.dc_p2)
+        # self.testTimer.start(self.exposeTime)
         print("dc p1")
 
     def dc_p2(self):
@@ -535,7 +535,7 @@ class StartTestWindow(QWidget):
         if self.dataTimer.isActive():
             self.dataTimer.stop()
 
-        self.filename = "d3v3_{}".format(datetime.now().strftime('%m%d%H%M%S'))
+        self.filename = "d3v3_{}.csv".format(datetime.now().strftime('%m%d%H%M%S'))
         self.save = self.askSave()
         if self.save == QMessageBox.Ok:
             self.saveData()
@@ -551,6 +551,7 @@ class StartTestWindow(QWidget):
         return self.saveMsg.exec()
 
     def saveData(self):
+        self.filenameTotal = self.dataPath + self.filename
         self.stackedArray = [self.timeArray, self.sensor1Array, self.sensor2Array, self.sensor3Array]
         np.savetxt(self.filename, self.stackedArray, fmt='%.10f', delimiter=',')
         self.saveMessageEnd = QMessageBox()
