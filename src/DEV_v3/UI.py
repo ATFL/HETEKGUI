@@ -175,7 +175,7 @@ class HomeWindow(QWidget):
 
         self.b6 = self.button()
         self.b6.setButtonText("Exit")
-        self.b6.clicked.connect(lambda: QApplication.closeAllWindows())
+        self.b6.clicked.connect(lambda: self.exitFunction())
 
     def showPW(self):
         self.PW = PurgeWindow()
