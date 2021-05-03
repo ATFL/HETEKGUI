@@ -234,9 +234,12 @@ class PurgeWindow(QWidget):
         self.PWButtonSetup()
         self.purgeTimer = QTimer()
         self.purgeTimer2 = QTimer()
-
-        self.purge1Time = 20000 # normally 20000
-        self.purge2Time = 10000 # normally 10000
+        self.purgeTimer.isSingleShot(True)
+        self.purgeTimer2.isSingleShot(True)
+        self.purgeTimer.timeout.connect(lambda: self.SM.expose())
+        self.purgeTimer2.timeout.connect(lambda: self.stop())
+        self.purge1Time = 5000 # normally 20000
+        self.purge2Time = 10000 # normally 30000
         self.PWUI()
 
     def loadWindowSettings(self):
@@ -298,19 +301,9 @@ class PurgeWindow(QWidget):
     def purge(self):
         self.pump.activate()
         self.valve.activate()
-        self.purgeTimer.timeout.connect(lambda: self.SM.expose())
-        self.purgeTimer.isSingleShot(True)
 
-        self.purgeTimer2.timeout.connect(lambda: self.SM.recover())
-        self.purgeTimer2.isSingleShot(True)
         self.purgeTimer.start(self.purge1Time)
-
-
-    def purge2(self):
-        self.SM.expose()
-        self.purgeTimer.disconnect()
-        self.purgeTimer.timeout.connect(lambda: self.stop())
-        self.purgeTimer.start(self.purge2Time)
+        self.purgeTimer2.start(self.purge2Time)
 
     def stop(self):
         if self.purgeTimer.isActive():
