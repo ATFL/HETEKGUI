@@ -511,7 +511,7 @@ class StartTestWindow(QWidget):
         self.recoveryTimer.timeout.connect(lambda: self.SM.recover())
         self.recoveryTimer.start(self.recoverTime)
 
-        self.endTimer.timeout.connect(lambda: self.SM.expose())
+        self.endTimer.timeout.connect(lambda: self.stop())
         self.endTimer.start(self.endTestTime)
 
     # def dc_p1(self):
