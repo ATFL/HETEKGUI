@@ -7,7 +7,7 @@ class MFC:
         self.IP = IP
         self.mfc = FlowController(self.IP)
 
-    def get(self):
+    async def get(self):
         async with self.MFC:
             print(await self.mfc.get())
 
