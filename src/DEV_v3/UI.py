@@ -445,7 +445,7 @@ class StartTestWindow(QWidget):
         print("Window Settings Loaded")
 
     def loadComponents(self):
-        self.kit = MotorKit(i2c=board.I2C())
+        self.kit = MotorKit(0x63)
         self.adc = adc.ADS1115(0x48)
         self.SM = Stepper(self.kit.stepper1)
         self.valve = MOTOR(self.kit.motor3, "Valve")
