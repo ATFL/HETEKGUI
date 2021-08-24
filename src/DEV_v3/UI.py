@@ -96,14 +96,21 @@ class MOTOR:
         self.status = False
 
     def activate(self):
-        self.motor.throttle = 1
-        self.status = True
-        print("{}: ON".format(self.name))
+        try:
+            self.motor.throttle = 1
+            self.status = True
+            print("{}: ON".format(self.name))
+
+        except:
+            print("Weird power shit")
 
     def deactivate(self):
-        self.motor.throttle = 0
-        self.status = False
-        print("{}: OFF".format(self.name))
+        try:
+            self.motor.throttle = 0
+            self.status = False
+            print("{}: OFF".format(self.name))
+        except:
+            print("Weird Power Shit")
 
     def toggle(self):
         if self.status:
