@@ -450,7 +450,7 @@ class StartTestWindow(QWidget):
         self.SM = Stepper(self.kit.stepper1)
         self.valve = MOTOR(self.kit.motor3, "Valve")
         self.pump = MOTOR(self.kit.motor4, "Pump")
-
+        # POOP
         self.valve.deactivate()
         self.pump.deactivate()
         self.SM.motor.release()
