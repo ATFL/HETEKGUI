@@ -64,6 +64,10 @@ class Stepper(QWidget):
         
     def move(self):
         self.motor.onestep(direction=self.stepDirection, style=self.stepStyle)
+        if self.stepDirection == stepper.FORWARD:
+                self.currentPos = self.currentPos + 1
+            else:
+                self.currentPos = self.currentPos - 1
         
 
 class ControlPanelWindow(QWidget):
@@ -124,21 +128,27 @@ class ControlPanelWindow(QWidget):
         # self.b4.clicked.connect(lambda: self.SM.moveRight())
         self.b4.pressed.connect(lambda: self.move("R"))
         self.b4.released.connect(lambda: self.endMove())
+        
+        self.b5 = self.button()
+        self.b5.setButtonText("Zero")
+        self.b5.clicked.connect(lambda: self.SM.zero())
 
     def move(self, direction):
         if direction == "L":
             self.SM.direction = stepper.BACKWARD
         else:
             self.SM.direction = stepper.FORWARD
-            
+        # print("starting movement")
         self.buttonStatus = True
         while self.buttonStatus:
+            app.processEvents()
             self.SM.move()
         self.SM.motor.release()
     
     def endMove(self):
         self.buttonStatus = False
-        
+        self.SM.motor.release()
+        print("Current Position: {}".format(self.SM.currentPos))
     
     def CPWUI(self):
         self.layout = QGridLayout()
@@ -147,6 +157,7 @@ class ControlPanelWindow(QWidget):
         self.layout.addWidget(self.b2)
         self.layout.addWidget(self.b3)
         self.layout.addWidget(self.b4)
+        self.layout.addWidget(self.b5)
 
         self.setLayout(self.layout)
 
