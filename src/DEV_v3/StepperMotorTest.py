@@ -39,13 +39,13 @@ class Stepper(QWidget):
 
     def moveLeft(self):
         self.stepDirection = stepper.BACKWARD
-        self.step(2)
+        self.step(10)
         print("<<")
         self.stepperPos = "mid"
 
     def moveRight(self):
         self.stepDirection = stepper.FORWARD
-        self.step(2)
+        self.step(10)
         print(">>")
         self.stepperPos = "mid"
 
@@ -61,6 +61,14 @@ class Stepper(QWidget):
             else:
                 self.currentPos = self.currentPos - 1
         self.motor.release()
+        
+    def heldStepRight(self):
+        self.stepDirection = stepper.FORWARD
+        self.motor.onestep(direction=self.stepDirection, style=self.stepStyle)
+        
+    def heldStepLeft(self):
+        self.stepDirection = stepper.BACKWARD
+        self.motor.onestep(direction=self.stepDirection, style=self.stepStyle)
 
 class ControlPanelWindow(QWidget):
     class button(QPushButton):
@@ -110,12 +118,14 @@ class ControlPanelWindow(QWidget):
         self.b3 = self.button()
         self.b3.setButtonText("<<")
         # self.b3.clicked.connect(lambda: self.SM.moveLeft())
-        self.b3.pressed.connect(lambda: self.SM.moveLeft())
+        self.b3.pressed.connect(lambda: self.SM.heldStepLeft())
+        self.b4.released.connect(lambda: self.SM.release())
 
         self.b4 = self.button()
         self.b4.setButtonText(">>")
         # self.b4.clicked.connect(lambda: self.SM.moveRight())
-        self.b4.pressed.connect(lambda: self.SM.moveRight())
+        self.b4.pressed.connect(lambda: self.SM.heldStepRight())
+        self.b4.released.connect(lambda: self.SM.release())
 
     def CPWUI(self):
         self.layout = QGridLayout()
