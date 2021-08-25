@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+
 import Adafruit_ADS1x15 as adc
 from adafruit_motorkit import MotorKit
 from adafruit_motor import stepper
@@ -24,14 +25,14 @@ class Stepper(QWidget):
 
     def expose(self):
         if not self.stepperPos == "exposed":
-            self.stepDirection = stepper.FORWARD
+            self.stepDirection = stepper.BACKWARD
             print("Exposing")
             self.step(110)
             self.stepperPos = "exposed"
 
     def recover(self):
         if not self.stepperPos == "recovered":
-            self.stepDirection = stepper.BACKWARD
+            self.stepDirection = stepper.FORWARD
             self.step(110)
             print("Recovering")
             self.stepperPos = "recovered"
@@ -108,11 +109,13 @@ class ControlPanelWindow(QWidget):
 
         self.b3 = self.button()
         self.b3.setButtonText("<<")
-        self.b3.clicked.connect(lambda: self.SM.moveLeft())
+        # self.b3.clicked.connect(lambda: self.SM.moveLeft())
+        self.b3.pressed.connect(lambda: self.SM.moveLeft())
 
         self.b4 = self.button()
         self.b4.setButtonText(">>")
-        self.b4.clicked.connect(lambda: self.SM.moveRight())
+        # self.b4.clicked.connect(lambda: self.SM.moveRight())
+        self.b4.pressed.connect(lambda: self.SM.moveRight())
 
     def CPWUI(self):
         self.layout = QGridLayout()
