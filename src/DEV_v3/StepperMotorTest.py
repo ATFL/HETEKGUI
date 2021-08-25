@@ -62,13 +62,9 @@ class Stepper(QWidget):
                 self.currentPos = self.currentPos - 1
         self.motor.release()
         
-    def heldStepRight(self):
-        self.stepDirection = stepper.FORWARD
+    def move(self):
         self.motor.onestep(direction=self.stepDirection, style=self.stepStyle)
         
-    def heldStepLeft(self):
-        self.stepDirection = stepper.BACKWARD
-        self.motor.onestep(direction=self.stepDirection, style=self.stepStyle)
 
 class ControlPanelWindow(QWidget):
     class button(QPushButton):
@@ -114,19 +110,36 @@ class ControlPanelWindow(QWidget):
         self.b2 = self.button()
         self.b2.setButtonText("Recover")
         self.b2.clicked.connect(lambda: self.SM.recover())
-
+        
+        self.buttonStatus = False
+        
         self.b3 = self.button()
         self.b3.setButtonText("<<")
         # self.b3.clicked.connect(lambda: self.SM.moveLeft())
-        self.b3.pressed.connect(lambda: self.SM.heldStepLeft())
-        self.b4.released.connect(lambda: self.SM.release())
+        self.b3.pressed.connect(lambda: self.move("L"))
+        self.b3.released.connect(lambda: self.endMove())
 
         self.b4 = self.button()
         self.b4.setButtonText(">>")
         # self.b4.clicked.connect(lambda: self.SM.moveRight())
-        self.b4.pressed.connect(lambda: self.SM.heldStepRight())
-        self.b4.released.connect(lambda: self.SM.release())
+        self.b4.pressed.connect(lambda: self.move("R"))
+        self.b4.released.connect(lambda: self.endMove())
 
+    def move(self, direction):
+        if direction == "L":
+            self.SM.direction = stepper.BACKWARD
+        else:
+            self.SM.direction = stepper.FORWARD
+            
+        self.buttonStatus = True
+        while self.buttonStatus:
+            self.SM.move()
+        self.SM.motor.release()
+    
+    def endMove(self):
+        self.buttonStatus = False
+        
+    
     def CPWUI(self):
         self.layout = QGridLayout()
 
