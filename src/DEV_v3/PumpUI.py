@@ -1,6 +1,8 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import *
 from adafruit_motorkit import MotorKit
+from adafruit_motor import stepper
+
 import sys
 
 app = QApplication(sys.argv)
@@ -65,6 +67,7 @@ class ControlPanelWindow(QWidget):
         print("Window Settings Loaded")
 
     def loadComponents(self):
+
         self.kit = MotorKit(0x63)
         self.pump = MOTOR(self.kit.motor4, "Pump")
 

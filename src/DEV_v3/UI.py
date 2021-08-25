@@ -97,7 +97,7 @@ class MOTOR:
 
     def activate(self):
         try:
-            self.motor.throttle = 0.95
+            self.motor.throttle = 0.90
             self.status = True
             print("{}: ON".format(self.name))
 
@@ -646,7 +646,7 @@ class ControlPanelWindow(QWidget):
 
         self.b3 = self.button()
         self.b3.setButtonText("<<")
-        self.b3.clicked.connect(lambda: self.SM.moveLeft())
+        self.b3.clicked.connect(lambda: self.SM.moveLeft()
 
         self.b4 = self.button()
         self.b4.setButtonText(">>")
