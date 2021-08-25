@@ -97,7 +97,7 @@ class MOTOR:
 
     def activate(self):
         try:
-            self.motor.throttle = 1
+            #self.motor.throttle = 1
             self.status = True
             print("{}: ON".format(self.name))
 
@@ -106,7 +106,7 @@ class MOTOR:
 
     def deactivate(self):
         try:
-            self.motor.throttle = 0
+            #self.motor.throttle = 0
             self.status = False
             print("{}: OFF".format(self.name))
         except:
