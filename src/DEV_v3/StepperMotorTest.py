@@ -1,5 +1,7 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 import Adafruit_ADS1x15 as adc
 from adafruit_motorkit import MotorKit
 from adafruit_motor import stepper
@@ -35,13 +37,13 @@ class Stepper(QWidget):
             self.stepperPos = "recovered"
 
     def moveLeft(self):
-        self.stepDirection = stepper.FORWARD
+        self.stepDirection = stepper.BACKWARD
         self.step(2)
         print("<<")
         self.stepperPos = "mid"
 
     def moveRight(self):
-        self.stepDirection = stepper.BACKWARD
+        self.stepDirection = stepper.FORWARD
         self.step(2)
         print(">>")
         self.stepperPos = "mid"
@@ -106,7 +108,7 @@ class ControlPanelWindow(QWidget):
 
         self.b3 = self.button()
         self.b3.setButtonText("<<")
-        self.b3.clicked.connect(lambda: self.SM.moveLeft()
+        self.b3.clicked.connect(lambda: self.SM.moveLeft())
 
         self.b4 = self.button()
         self.b4.setButtonText(">>")
