@@ -97,7 +97,7 @@ class MOTOR:
 
     def activate(self):
         try:
-            self.motor.throttle = 1
+            self.motor.throttle = 0.95
             self.status = True
             print("{}: ON".format(self.name))
 
