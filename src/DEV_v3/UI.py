@@ -51,25 +51,25 @@ class Stepper(QWidget):
         if not self.stepperPos == "exposed":
             self.stepDirection = stepper.FORWARD
             print("Exposing")
-            self.step(110)
+            self.step(370)
             self.stepperPos = "exposed"
 
     def recover(self):
         if not self.stepperPos == "recovered":
             self.stepDirection = stepper.BACKWARD
-            self.step(110)
+            self.step(370)
             print("Recovering")
             self.stepperPos = "recovered"
 
     def moveLeft(self):
         self.stepDirection = stepper.FORWARD
-        self.step(2)
+        self.step(10)
         print("<<")
         self.stepperPos = "mid"
 
     def moveRight(self):
         self.stepDirection = stepper.BACKWARD
-        self.step(2)
+        self.step(10)
         print(">>")
         self.stepperPos = "mid"
 
@@ -85,6 +85,13 @@ class Stepper(QWidget):
             else:
                 self.currentPos = self.currentPos - 1
         self.motor.release()
+
+    def move(self):
+        self.motor.onestep(direction=self.stepDirection, style=self.stepStyle)
+        if self.stepDirection == stepper.FORWARD:
+            self.currentPos = self.currentPos + 1
+        else:
+            self.currentPos = self.currentPos - 1
 
 
 class MOTOR:
@@ -644,13 +651,19 @@ class ControlPanelWindow(QWidget):
         self.b2.setButtonText("Recover")
         self.b2.clicked.connect(lambda: self.SM.recover())
 
+        self.buttonStatus = False
+
         self.b3 = self.button()
         self.b3.setButtonText("<<")
-        self.b3.clicked.connect(lambda: self.SM.moveLeft()
+        # self.b3.clicked.connect(lambda: self.SM.moveLeft())
+        self.b3.pressed.connect(lambda: self.move(0))
+        self.b3.released.connect(lambda: self.endMove())
 
         self.b4 = self.button()
         self.b4.setButtonText(">>")
-        self.b4.clicked.connect(lambda: self.SM.moveRight())
+        # self.b4.clicked.connect(lambda: self.SM.moveRight())
+        self.b4.pressed.connect(lambda: self.move(1))
+        self.b4.released.connect(lambda: self.endMove())
 
         self.b5 = self.button()
         self.b5.setButtonText("Toggle Valve")
@@ -667,6 +680,23 @@ class ControlPanelWindow(QWidget):
         self.b8 = self.button()
         self.b8.setButtonText("Home")
         self.b8.clicked.connect(lambda: self.showHW())
+
+    def move(self, direction):
+        if direction == 0:
+            self.SM.stepDirection = stepper.BACKWARD
+        else:
+            self.SM.stepDirection = stepper.FORWARD
+        # print("starting movement")
+        self.buttonStatus = True
+        while self.buttonStatus:
+            app.processEvents()
+            self.SM.move()
+        self.SM.motor.release()
+
+    def endMove(self):
+        self.buttonStatus = False
+        self.SM.motor.release()
+        print("Current Position: {}".format(self.SM.currentPos))
 
     def showHW(self):
         self.HW = HomeWindow()
