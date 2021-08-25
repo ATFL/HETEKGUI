@@ -27,13 +27,13 @@ class Stepper(QWidget):
         if not self.stepperPos == "exposed":
             self.stepDirection = stepper.BACKWARD
             print("Exposing")
-            self.step(110)
+            self.step(370)
             self.stepperPos = "exposed"
 
     def recover(self):
         if not self.stepperPos == "recovered":
             self.stepDirection = stepper.FORWARD
-            self.step(110)
+            self.step(370)
             print("Recovering")
             self.stepperPos = "recovered"
 
@@ -65,9 +65,9 @@ class Stepper(QWidget):
     def move(self):
         self.motor.onestep(direction=self.stepDirection, style=self.stepStyle)
         if self.stepDirection == stepper.FORWARD:
-                self.currentPos = self.currentPos + 1
-            else:
-                self.currentPos = self.currentPos - 1
+            self.currentPos = self.currentPos + 1
+        else:
+            self.currentPos = self.currentPos - 1
         
 
 class ControlPanelWindow(QWidget):
@@ -120,13 +120,13 @@ class ControlPanelWindow(QWidget):
         self.b3 = self.button()
         self.b3.setButtonText("<<")
         # self.b3.clicked.connect(lambda: self.SM.moveLeft())
-        self.b3.pressed.connect(lambda: self.move("L"))
+        self.b3.pressed.connect(lambda: self.move(0))
         self.b3.released.connect(lambda: self.endMove())
 
         self.b4 = self.button()
         self.b4.setButtonText(">>")
         # self.b4.clicked.connect(lambda: self.SM.moveRight())
-        self.b4.pressed.connect(lambda: self.move("R"))
+        self.b4.pressed.connect(lambda: self.move(1))
         self.b4.released.connect(lambda: self.endMove())
         
         self.b5 = self.button()
@@ -134,10 +134,10 @@ class ControlPanelWindow(QWidget):
         self.b5.clicked.connect(lambda: self.SM.zero())
 
     def move(self, direction):
-        if direction == "L":
-            self.SM.direction = stepper.BACKWARD
+        if direction == 0:
+            self.SM.stepDirection = stepper.BACKWARD
         else:
-            self.SM.direction = stepper.FORWARD
+            self.SM.stepDirection = stepper.FORWARD
         # print("starting movement")
         self.buttonStatus = True
         while self.buttonStatus:
