@@ -511,9 +511,18 @@ class StartTestWindow(QWidget):
 
     def initializeTest(self):
         # Collect Sample
-        self.SM.recover()
-        self.pump.activate()
-        self.valve.activate()
+        try:
+            self.SM.recover()
+        except:
+            print("SM recover failed")
+        try:
+            self.pump.activate()
+        except:
+            print("pump activation failed")
+        try:
+            self.valve.activate()
+        except:
+            print("valve activation failed")
         self.testTimer.setSingleShot(True)
         self.testTimer.timeout.connect(lambda: self.data_collect())
         self.testTimer.start(self.sampleCollectTime)
