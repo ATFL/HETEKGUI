@@ -95,16 +95,17 @@ class Stepper(QWidget):
 
 
 class MOTOR:
-    def __init__(self, channel, name):
+    def __init__(self, channel, name, throttleVal):
         super(MOTOR, self).__init__()
         self.motor = channel
         self.name = name
+        self.throttleVal = throttleVal
 
         self.status = False
 
     def activate(self):
         try:
-            self.motor.throttle = 0.90
+            self.motor.throttle = self.throttleVal
             self.status = True
             print("{}: ON".format(self.name))
 
@@ -633,8 +634,8 @@ class ControlPanelWindow(QWidget):
         self.kit = MotorKit(0x63)
         self.adc = adc.ADS1115(0x48)
         self.SM = Stepper(self.kit.stepper1)
-        self.valve = MOTOR(self.kit.motor3, "Valve")
-        self.pump = MOTOR(self.kit.motor4, "Pump")
+        self.valve = MOTOR(self.kit.motor3, "Valve", 1)
+        self.pump = MOTOR(self.kit.motor4, "Pump", 0.9)
 
         self.valve.deactivate()
         self.pump.deactivate()

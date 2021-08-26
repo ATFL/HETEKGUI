@@ -17,7 +17,7 @@ class MOTOR:
 
     def activate(self):
         try:
-            self.motor.throttle = 0.75
+            self.motor.throttle = 1
             self.status = True
             print("{}: ON".format(self.name))
 
@@ -69,7 +69,7 @@ class ControlPanelWindow(QWidget):
     def loadComponents(self):
 
         self.kit = MotorKit(0x63)
-        self.pump = MOTOR(self.kit.motor4, "Pump")
+        self.pump = MOTOR(self.kit.motor3, "Pump")
 
         self.pump.deactivate()
 
