@@ -528,6 +528,7 @@ class StartTestWindow(QWidget):
 
         except:
             print("valve activation failed")
+        print("starting timer")
         self.testTimer.setSingleShot(True)
         self.testTimer.timeout.connect(lambda: self.data_collect())
         self.testTimer.start(self.sampleCollectTime)
