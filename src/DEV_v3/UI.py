@@ -763,7 +763,7 @@ class SensorGraphWindow(QWidget):
         self.SM.motor.release()
 
         self.sensor1 = MOS(self.adc, 0)
-        self.sensor2 = MOS(self.adc, 1)
+        self.sensor2 = MOS(self.adc, 3)
         self.sensor3 = MOS(self.adc, 2)
 
         print("Components Loaded")
