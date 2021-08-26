@@ -519,7 +519,7 @@ class StartTestWindow(QWidget):
         except:
             print("SM recover failed")
         try:
-            self.pump.activate()
+            #self.pump.activate()
             print("pump activated")
 
         except:
