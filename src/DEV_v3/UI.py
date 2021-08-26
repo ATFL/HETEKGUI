@@ -53,6 +53,7 @@ class Stepper(QWidget):
             print("Exposing")
             self.step(370)
             self.stepperPos = "exposed"
+        self.motor.release()
 
     def recover(self):
         if not self.stepperPos == "recovered":
@@ -60,6 +61,7 @@ class Stepper(QWidget):
             self.step(370)
             print("Recovering")
             self.stepperPos = "recovered"
+        self.motor.release()
 
     def moveLeft(self):
         self.stepDirection = stepper.FORWARD
