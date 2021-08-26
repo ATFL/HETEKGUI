@@ -102,7 +102,7 @@ class MOTOR:
         self.throttleVal = throttleVal
 
         self.status = False
-
+#comment
     def activate(self):
         try:
             self.motor.throttle = self.throttleVal
