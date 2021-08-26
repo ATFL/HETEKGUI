@@ -513,14 +513,19 @@ class StartTestWindow(QWidget):
         # Collect Sample
         try:
             self.SM.recover()
+            print("Stepper motor home")
         except:
             print("SM recover failed")
         try:
             self.pump.activate()
+            print("pump activated")
+
         except:
             print("pump activation failed")
         try:
             self.valve.activate()
+            print("valve activated")
+
         except:
             print("valve activation failed")
         self.testTimer.setSingleShot(True)
