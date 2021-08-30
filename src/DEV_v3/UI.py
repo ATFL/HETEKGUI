@@ -436,10 +436,10 @@ class StartTestWindow(QWidget):
         self.path = os.getcwd()
         self.dataPath = "{}/data/".format(self.path)
 
-        self.sampleCollectTime = 5000 # normally 20000
-        self.exposeTime = 5000 # normally 10000
-        self.recoverTime = 10000 # normally 50000
-        self.endTestTime = 15000 # normally 120000
+        self.sampleCollectTime = 20000 # normally 20000
+        self.exposeTime = 10000 # normally 10000
+        self.recoverTime = 50000 # normally 50000
+        self.endTestTime = 120000 # normally 120000
 
         self.testTimer = QTimer()
         self.dataTimer = QTimer()
@@ -519,7 +519,7 @@ class StartTestWindow(QWidget):
         except:
             print("SM recover failed")
         try:
-            #self.pump.activate()
+            self.pump.activate()
             print("pump activated")
 
         except:
