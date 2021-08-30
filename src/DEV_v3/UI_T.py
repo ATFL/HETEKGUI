@@ -122,7 +122,6 @@ class MOTOR:
 class button(QPushButton):
     def __init__(self):
         super(button, self).__init__()
-        self.setText(name)
 
     def setButtonColor(self, color):
         self.setStyleSheet('background-color: {}'.format(color))
@@ -172,15 +171,15 @@ class HomeWindow(QWidget):
         self.b3.setButtonText("Control Panel")
         self.b3.clicked.connect(lambda: self.showCPW())
 
-        self.b4 = self.button()
+        self.b4 = button()
         self.b4.setButtonText("Sensor Graph")
         self.b4.clicked.connect(lambda: self.showSGW())
 
-        self.b5 = self.button()
+        self.b5 = button()
         self.b5.setButtonText("Settings")
         self.b5.clicked.connect(lambda: self.showSW())
 
-        self.b6 = self.button()
+        self.b6 = button()
         self.b6.setButtonText("Exit")
         self.b6.clicked.connect(lambda: self.exitFunction())
 
@@ -234,10 +233,6 @@ class HomeWindow(QWidget):
 
 
 class PurgeWindow(QWidget):
-    class button(QPushButton):
-        def __init__(self, *args, **kwargs):
-            super(PurgeWindow.button, self).__init__()
-            self.setText("Button Name")
 
         def setButtonColor(self, color):
             self.setStyleSheet('background-color: {}'.format(color))
@@ -281,23 +276,23 @@ class PurgeWindow(QWidget):
         print("Components Loaded")
 
     def PWButtonSetup(self):
-        self.b1 = self.button()
+        self.b1 = button()
         self.b1.setButtonText("Purge")
         self.b1.clicked.connect(lambda: self.purge())
 
-        self.b2 = self.button()
+        self.b2 = button()
         self.b2.setButtonText("Home")
         self.b2.clicked.connect(lambda: self.showHW())
 
-        self.b3 = self.button()
+        self.b3 = button()
         self.b3.setButtonText("Control Panel")
         self.b3.clicked.connect(lambda: self.showCPW())
 
-        self.b4 = self.button()
+        self.b4 = button()
         self.b4.setButtonText("Stop")
         self.b4.clicked.connect(lambda: self.stop())
 
-        self.b5 = self.button()
+        self.b5 = button()
         self.b5.setButtonText("Start Test")
         self.b5.clicked.connect(lambda: self.showSTW())
 
@@ -345,16 +340,6 @@ class PurgeWindow(QWidget):
 
 
 class SettingsWindow(QWidget):
-    class button(QPushButton):
-        def __init__(self, *args, **kwargs):
-            super(SettingsWindow.button, self).__init__()
-            self.setText("Button Name")
-
-        def setButtonColor(self, color):
-            self.setStyleSheet('background-color: {}'.format(color))
-
-        def setButtonText(self, text):
-            self.setText(text)
 
     def __init__(self):
         super(SettingsWindow, self).__init__()
@@ -384,7 +369,7 @@ class SettingsWindow(QWidget):
         print("Components Loaded")
 
     def SWButtonSetup(self):
-        self.b1 = self.button()
+        self.b1 = button()
         self.b1.setButtonText("Home")
         self.b1.clicked.connect(lambda: self.showHW())
 
@@ -405,17 +390,6 @@ class SettingsWindow(QWidget):
 
 
 class StartTestWindow(QWidget):
-    class button(QPushButton):
-        def __init__(self, *args, **kwargs):
-            super(StartTestWindow.button, self).__init__()
-            self.setText("Button Name")
-
-        def setButtonColor(self, color):
-            self.setStyleSheet('background-color: {}'.format(color))
-
-        def setButtonText(self, text):
-            self.setText(text)
-
     def __init__(self):
         super(StartTestWindow, self).__init__()
         self.loadWindowSettings()
@@ -484,16 +458,16 @@ class StartTestWindow(QWidget):
         self.sensor3Plot = self.sensorGraph.plot(self.timeArray, self.sensor3Array, pen='b')
 
     def STWButtonSetup(self):
-        self.b1 = self.button()
+        self.b1 = button()
         self.b1.setButtonText("Start")
         self.b1.clicked.connect(lambda: self.initializeTest())
 
-        self.b2 = self.button()
+        self.b2 = button()
         self.b2.setButtonText("Stop")
         self.b2.clicked.connect(lambda: self.stop())
         self.b2.setDisabled(True)
 
-        self.b3 = self.button()
+        self.b3 = button()
         self.b3.setButtonText("Home")
         self.b3.clicked.connect(lambda: self.showHW())
 
@@ -597,17 +571,6 @@ class StartTestWindow(QWidget):
 
 
 class ControlPanelWindow(QWidget):
-    class button(QPushButton):
-        def __init__(self, *args, **kwargs):
-            super(ControlPanelWindow.button, self).__init__()
-            self.setText("Button Name")
-
-        def setButtonColor(self, color):
-            self.setStyleSheet('background-color: {}'.format(color))
-
-        def setButtonText(self, text):
-            self.setText(text)
-
     def __init__(self):
         super(ControlPanelWindow, self).__init__()
         self.loadWindowSettings()
@@ -637,35 +600,35 @@ class ControlPanelWindow(QWidget):
         print("Components Loaded")
 
     def CPWButtonSetup(self):
-        self.b1 = self.button()
+        self.b1 = button()
         self.b1.setButtonText("Expose")
         self.b1.clicked.connect(lambda: self.SM.expose())
 
-        self.b2 = self.button()
+        self.b2 = button()
         self.b2.setButtonText("Recover")
         self.b2.clicked.connect(lambda: self.SM.recover())
 
-        self.b3 = self.button()
+        self.b3 = button()
         self.b3.setButtonText("<<")
         self.b3.clicked.connect(lambda: self.SM.moveLeft())
 
-        self.b4 = self.button()
+        self.b4 = button()
         self.b4.setButtonText(">>")
         self.b4.clicked.connect(lambda: self.SM.moveRight())
 
-        self.b5 = self.button()
+        self.b5 = button()
         self.b5.setButtonText("Toggle Valve")
         self.b5.clicked.connect(lambda: self.valve.toggle())
 
-        self.b6 = self.button()
+        self.b6 = button()
         self.b6.setButtonText("Toggle Pump")
         self.b6.clicked.connect(lambda: self.pump.toggle())
 
-        self.b7 = self.button()
+        self.b7 = button()
         self.b7.setButtonText("Zero Stepper Motor")
         self.b7.clicked.connect(lambda: self.SM.zero())
 
-        self.b8 = self.button()
+        self.b8 = button()
         self.b8.setButtonText("Home")
         self.b8.clicked.connect(lambda: self.showHW())
 
@@ -690,17 +653,6 @@ class ControlPanelWindow(QWidget):
 
 
 class SensorGraphWindow(QWidget):
-    class button(QPushButton):
-        def __init__(self, *args, **kwargs):
-            super(SensorGraphWindow.button, self).__init__()
-            self.setText("Button Name")
-
-        def setButtonColor(self, color):
-            self.setStyleSheet('background-color: {}'.format(color))
-
-        def setButtonText(self, text):
-            self.setText(text)
-
     def __init__(self):
         super(SensorGraphWindow, self).__init__()
         self.loadWindowSettings()
@@ -765,23 +717,23 @@ class SensorGraphWindow(QWidget):
         self.sensor3Plot.setData(self.timeArray, self.sensor3Array)
 
     def SGWButtonSetup(self):
-        self.b1 = self.button()
+        self.b1 = button()
         self.b1.setButtonText("Expose")
         self.b1.clicked.connect(lambda: self.SM.expose())
 
-        self.b2 = self.button()
+        self.b2 = button()
         self.b2.setButtonText("Recover")
         self.b2.clicked.connect(lambda: self.SM.recover())
 
-        self.b3 = self.button()
+        self.b3 = button()
         self.b3.setButtonText("Toggle Valve")
         self.b3.clicked.connect(lambda: self.valve.toggle())
 
-        self.b4 = self.button()
+        self.b4 = button()
         self.b4.setButtonText("Toggle Pump")
         self.b4.clicked.connect(lambda: self.pump.toggle())
 
-        self.b5 = self.button()
+        self.b5 = button()
         self.b5.setButtonText("Home")
         self.b5.clicked.connect(lambda: self.showHW())
 
