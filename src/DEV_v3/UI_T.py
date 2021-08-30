@@ -393,10 +393,10 @@ class StartTestWindow(QWidget):
         self.path = os.getcwd()
         self.dataPath = "{}/data/".format(self.path)
 
-        self.sampleCollectTime = 5000  # normally 20000
-        self.exposeTime = 5000  # normally 10000
-        self.recoverTime = 10000  # normally 50000
-        self.endTestTime = 15000  # normally 120000
+        self.sampleCollectTime = 20000  # normally 20000
+        self.exposeTime = 10000  # normally 10000
+        self.recoverTime = 50000  # normally 50000
+        self.endTestTime = 120000  # normally 120000
 
         self.testTimer = QTimer()
         self.dataTimer = QTimer()
@@ -469,11 +469,40 @@ class StartTestWindow(QWidget):
         self.HW.show()
         self.close()
 
+    # def initializeTest(self):
+    #     # Collect Sample
+    #     self.SM.recover()
+    #     self.pump.activate()
+    #     self.valve.activate()
+    #     self.testTimer.setSingleShot(True)
+    #     self.testTimer.timeout.connect(lambda: self.data_collect())
+    #     self.testTimer.start(self.sampleCollectTime)
+    #     self.dataTimer.start(100)
+    #     self.b1.setDisabled(True)
+    #     self.b2.setDisabled(False)
+    #     self.b3.setDisabled(True)
+    #     print("Initialize Text")
+
     def initializeTest(self):
         # Collect Sample
-        self.SM.recover()
-        self.pump.activate()
-        self.valve.activate()
+        try:
+            self.SM.recover()
+            print("Stepper motor home")
+        except:
+            print("SM recover failed")
+        try:
+            #self.pump.activate()
+            print("pump activated")
+
+        except:
+            print("pump activation failed")
+        try:
+            self.valve.activate()
+            print("valve activated")
+
+        except:
+            print("valve activation failed")
+        print("starting timer")
         self.testTimer.setSingleShot(True)
         self.testTimer.timeout.connect(lambda: self.data_collect())
         self.testTimer.start(self.sampleCollectTime)
