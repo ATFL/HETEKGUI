@@ -17,7 +17,6 @@ from adafruit_motor import stepper
 
 app = QApplication(sys.argv)
 
-
 class MOS:
     def __init__(self, adc, channel):
         super(MOS, self).__init__()
@@ -51,25 +50,25 @@ class Stepper(QThread):
         if not self.stepperPos == "exposed":
             self.stepDirection = stepper.FORWARD
             print("Exposing")
-            self.step(110)
+            self.step(370)
             self.stepperPos = "exposed"
 
     def recover(self):
         if not self.stepperPos == "recovered":
             self.stepDirection = stepper.BACKWARD
-            self.step(110)
+            self.step(370)
             print("Recovering")
             self.stepperPos = "recovered"
 
     def moveLeft(self):
         self.stepDirection = stepper.FORWARD
-        self.step(2)
+        self.step(10)
         print("<<")
         self.stepperPos = "mid"
 
     def moveRight(self):
         self.stepDirection = stepper.BACKWARD
-        self.step(2)
+        self.step(10)
         print(">>")
         self.stepperPos = "mid"
 
@@ -86,18 +85,26 @@ class Stepper(QThread):
                 self.currentPos = self.currentPos - 1
         self.motor.release()
 
+    def move(self):
+        self.motor.onestep(direction=self.stepDirection, style=self.stepStyle)
+        if self.stepDirection == stepper.FORWARD:
+            self.currentPos = self.currentPos + 1
+        else:
+            self.currentPos = self.currentPos - 1
+
 
 class MOTOR:
-    def __init__(self, channel, name):
+    def __init__(self, channel, name, throttleVal):
         super(MOTOR, self).__init__()
         self.motor = channel
         self.name = name
+        self.throttleVal = throttleVal
 
         self.status = False
 
     def activate(self):
         try:
-            self.motor.throttle = 1
+            self.motor.throttle = self.throttleVal
             self.status = True
             print("{}: ON".format(self.name))
 
@@ -150,8 +157,8 @@ class HomeWindow(QWidget):
         self.kit = MotorKit(0x63)
         self.adc = adc.ADS1115(0x48)
         self.SM = Stepper(self.kit.stepper1)
-        self.valve = MOTOR(self.kit.motor3, "Valve")
-        self.pump = MOTOR(self.kit.motor4, "Pump")
+        self.valve = MOTOR(self.kit.motor3, "Valve", 1)
+        self.pump = MOTOR(self.kit.motor4, "Pump", 0.9)
 
         self.valve.deactivate()
         self.pump.deactivate()
@@ -244,8 +251,8 @@ class PurgeWindow(QWidget):
         self.purgeTimer2.setSingleShot(True)
         self.purgeTimer.timeout.connect(lambda: self.SM.expose())
         self.purgeTimer2.timeout.connect(lambda: self.stop())
-        self.purge1Time = 5000  # normally 20000
-        self.purge2Time = 10000  # normally 30000
+        self.purge1Time = 20000  # normally 20000
+        self.purge2Time = 30000  # normally 30000
         self.PWUI()
 
     def loadWindowSettings(self):
@@ -260,8 +267,8 @@ class PurgeWindow(QWidget):
         self.kit = MotorKit(0x63)
         self.adc = adc.ADS1115(0x48)
         self.SM = Stepper(self.kit.stepper1)
-        self.valve = MOTOR(self.kit.motor3, "Valve")
-        self.pump = MOTOR(self.kit.motor4, "Pump")
+        self.valve = MOTOR(self.kit.motor3, "Valve", 1)
+        self.pump = MOTOR(self.kit.motor4, "Pump", 0.9)
 
         self.valve.deactivate()
         self.pump.deactivate()
@@ -353,8 +360,8 @@ class SettingsWindow(QWidget):
         self.kit = MotorKit(0x63)
         self.adc = adc.ADS1115(0x48)
         self.SM = Stepper(self.kit.stepper1)
-        self.valve = MOTOR(self.kit.motor3, "Valve")
-        self.pump = MOTOR(self.kit.motor4, "Pump")
+        self.valve = MOTOR(self.kit.motor3, "Valve", 1)
+        self.pump = MOTOR(self.kit.motor4, "Pump", 0.9)
 
         self.valve.deactivate()
         self.pump.deactivate()
@@ -423,8 +430,8 @@ class StartTestWindow(QWidget):
         self.adc = adc.ADS1115(0x48)
         self.SM = Stepper(self.kit.stepper1)
         self.SM.start()
-        self.valve = MOTOR(self.kit.motor3, "Valve")
-        self.pump = MOTOR(self.kit.motor4, "Pump")
+        self.valve = MOTOR(self.kit.motor3, "Valve", 1)
+        self.pump = MOTOR(self.kit.motor4, "Pump", 0.9)
         # POOP
         self.valve.deactivate()
         self.pump.deactivate()
@@ -612,8 +619,8 @@ class ControlPanelWindow(QWidget):
         self.kit = MotorKit(0x63)
         self.adc = adc.ADS1115(0x48)
         self.SM = Stepper(self.kit.stepper1)
-        self.valve = MOTOR(self.kit.motor3, "Valve")
-        self.pump = MOTOR(self.kit.motor4, "Pump")
+        self.valve = MOTOR(self.kit.motor3, "Valve", 1)
+        self.pump = MOTOR(self.kit.motor4, "Pump", 0.9)
 
         self.valve.deactivate()
         self.pump.deactivate()
@@ -622,37 +629,60 @@ class ControlPanelWindow(QWidget):
         print("Components Loaded")
 
     def CPWButtonSetup(self):
-        self.b1 = button()
+        self.b1 = self.button()
         self.b1.setButtonText("Expose")
         self.b1.clicked.connect(lambda: self.SM.expose())
 
-        self.b2 = button()
+        self.b2 = self.button()
         self.b2.setButtonText("Recover")
         self.b2.clicked.connect(lambda: self.SM.recover())
 
-        self.b3 = button()
+        self.buttonStatus = False
+
+        self.b3 = self.button()
         self.b3.setButtonText("<<")
-        self.b3.clicked.connect(lambda: self.SM.moveLeft())
+        # self.b3.clicked.connect(lambda: self.SM.moveLeft())
+        self.b3.pressed.connect(lambda: self.move(0))
+        self.b3.released.connect(lambda: self.endMove())
 
-        self.b4 = button()
+        self.b4 = self.button()
         self.b4.setButtonText(">>")
-        self.b4.clicked.connect(lambda: self.SM.moveRight())
+        # self.b4.clicked.connect(lambda: self.SM.moveRight())
+        self.b4.pressed.connect(lambda: self.move(1))
+        self.b4.released.connect(lambda: self.endMove())
 
-        self.b5 = button()
+        self.b5 = self.button()
         self.b5.setButtonText("Toggle Valve")
         self.b5.clicked.connect(lambda: self.valve.toggle())
 
-        self.b6 = button()
+        self.b6 = self.button()
         self.b6.setButtonText("Toggle Pump")
         self.b6.clicked.connect(lambda: self.pump.toggle())
 
-        self.b7 = button()
+        self.b7 = self.button()
         self.b7.setButtonText("Zero Stepper Motor")
         self.b7.clicked.connect(lambda: self.SM.zero())
 
-        self.b8 = button()
+        self.b8 = self.button()
         self.b8.setButtonText("Home")
         self.b8.clicked.connect(lambda: self.showHW())
+
+    def move(self, direction):
+        if direction == 0:
+            self.SM.stepDirection = stepper.BACKWARD
+        else:
+            self.SM.stepDirection = stepper.FORWARD
+        # print("starting movement")
+        self.buttonStatus = True
+        while self.buttonStatus:
+            app.processEvents()
+            self.SM.move()
+        self.SM.motor.release()
+
+    def endMove(self):
+        self.buttonStatus = False
+        self.SM.motor.release()
+        print("Current Position: {}".format(self.SM.currentPos))
 
     def showHW(self):
         self.HW = HomeWindow()
@@ -699,15 +729,15 @@ class SensorGraphWindow(QWidget):
         self.kit = MotorKit(0x63)
         self.adc = adc.ADS1115(0x48)
         self.SM = Stepper(self.kit.stepper1)
-        self.valve = MOTOR(self.kit.motor3, "Valve")
-        self.pump = MOTOR(self.kit.motor4, "Pump")
+        self.valve = MOTOR(self.kit.motor3, "Valve", 1)
+        self.pump = MOTOR(self.kit.motor4, "Pump", 0.9)
 
         self.valve.deactivate()
         self.pump.deactivate()
         self.SM.motor.release()
 
         self.sensor1 = MOS(self.adc, 0)
-        self.sensor2 = MOS(self.adc, 1)
+        self.sensor2 = MOS(self.adc, 3)
         self.sensor3 = MOS(self.adc, 2)
 
         print("Components Loaded")
