@@ -233,13 +233,6 @@ class HomeWindow(QWidget):
 
 
 class PurgeWindow(QWidget):
-
-        def setButtonColor(self, color):
-            self.setStyleSheet('background-color: {}'.format(color))
-
-        def setButtonText(self, text):
-            self.setText(text)
-
     def __init__(self):
         super(PurgeWindow, self).__init__()
         self.loadWindowSettings()
