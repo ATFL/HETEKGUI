@@ -439,7 +439,7 @@ class StartTestWindow(QWidget):
         self.sampleCollectTime = 20000 # normally 20000
         self.exposeTime = 10000 # normally 10000
         self.recoverTime = 50000 # normally 50000
-        self.endTestTime = 120000 # normally 120000
+        self.endTestTime = 200000 # normally 120000
 
         self.testTimer = QTimer()
         self.dataTimer = QTimer()
@@ -488,9 +488,9 @@ class StartTestWindow(QWidget):
         self.sensor2Array = [self.sensor2.read()]
         self.sensor3Array = [self.sensor3.read()]
 
-        self.sensor1Plot = self.sensorGraph.plot(self.timeArray, self.sensor1Array, pen='r')
+        #self.sensor1Plot = self.sensorGraph.plot(self.timeArray, self.sensor1Array, pen='r')
         self.sensor2Plot = self.sensorGraph.plot(self.timeArray, self.sensor2Array, pen='g')
-        self.sensor3Plot = self.sensorGraph.plot(self.timeArray, self.sensor3Array, pen='b')
+        #self.sensor3Plot = self.sensorGraph.plot(self.timeArray, self.sensor3Array, pen='b')
 
     def STWButtonSetup(self):
         self.b1 = self.button()
