@@ -149,8 +149,8 @@ class HomeWindow(QWidget):
         self.HWUI()
 
     def loadWindowSettings(self):
-        self.width = 480
-        self.height = 320
+        self.width = 840
+        self.height = 680
         self.bg_color = '#484848'
         self.setStyleSheet('background-color: {}'.format(self.bg_color))
         self.setGeometry(0, 0, self.width, self.height)
@@ -271,8 +271,8 @@ class PurgeWindow(QWidget):
         self.PWUI()
 
     def loadWindowSettings(self):
-        self.width = 480
-        self.height = 320
+        self.width = 840
+        self.height = 680
         self.bg_color = '#484848'
         self.setStyleSheet('background-color: {}'.format(self.bg_color))
         self.setGeometry(0, 0, self.width, self.height)
@@ -374,8 +374,8 @@ class SettingsWindow(QWidget):
         self.SWUI()
 
     def loadWindowSettings(self):
-        self.width = 480
-        self.height = 320
+        self.width = 840
+        self.height = 680
         self.bg_color = '#484848'
         self.setStyleSheet('background-color: {}'.format(self.bg_color))
         self.setGeometry(0, 0, self.width, self.height)
@@ -454,8 +454,8 @@ class StartTestWindow(QWidget):
         self.STWUI()
 
     def loadWindowSettings(self):
-        self.width = 480
-        self.height = 320
+        self.width = 840
+        self.height = 680
         self.bg_color = '#484848'
         self.setStyleSheet('background-color: {}'.format(self.bg_color))
         self.setGeometry(0, 0, self.width, self.height)
@@ -640,8 +640,8 @@ class ControlPanelWindow(QWidget):
         self.CPWUI()
 
     def loadWindowSettings(self):
-        self.width = 480
-        self.height = 320
+        self.width = 840
+        self.height = 680
         self.bg_color = '#484848'
         self.setStyleSheet('background-color: {}'.format(self.bg_color))
         self.setGeometry(0, 0, self.width, self.height)
@@ -761,8 +761,8 @@ class SensorGraphWindow(QWidget):
         self.SGWUI()
 
     def loadWindowSettings(self):
-        self.width = 480
-        self.height = 320
+        self.width = 840
+        self.height = 640
         self.bg_color = '#484848'
         self.setStyleSheet('background-color: {}'.format(self.bg_color))
         self.setGeometry(0, 0, self.width, self.height)
