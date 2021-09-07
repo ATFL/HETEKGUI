@@ -488,9 +488,9 @@ class StartTestWindow(QWidget):
         self.sensor2Array = [self.sensor2.read()]
         self.sensor3Array = [self.sensor3.read()]
 
-        #self.sensor1Plot = self.sensorGraph.plot(self.timeArray, self.sensor1Array, pen='r')
+        self.sensor1Plot = self.sensorGraph.plot(self.timeArray, self.sensor1Array, pen='r')
         self.sensor2Plot = self.sensorGraph.plot(self.timeArray, self.sensor2Array, pen='g')
-        #self.sensor3Plot = self.sensorGraph.plot(self.timeArray, self.sensor3Array, pen='b')
+        self.sensor3Plot = self.sensorGraph.plot(self.timeArray, self.sensor3Array, pen='b')
         self.sensorGraph.setYRange(0,5)
     def STWButtonSetup(self):
         self.b1 = self.button()
@@ -564,9 +564,9 @@ class StartTestWindow(QWidget):
         self.sensor2Array.append(self.sensor2.read())
         self.sensor3Array.append(self.sensor3.read())
 
-        #self.sensor1Plot.setData(self.timeArray, self.sensor1Array)
+        self.sensor1Plot.setData(self.timeArray, self.sensor1Array)
         self.sensor2Plot.setData(self.timeArray, self.sensor2Array)
-        #self.sensor3Plot.setData(self.timeArray, self.sensor3Array)
+        self.sensor3Plot.setData(self.timeArray, self.sensor3Array)
 
     def stop(self):
         self.pump.deactivate()

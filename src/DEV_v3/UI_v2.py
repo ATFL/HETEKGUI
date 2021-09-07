@@ -42,7 +42,7 @@ class button(QPushButton):
 		self.setText(text)
 
 
-class csSpinBox(QSpinBox):
+class csSpinBox(QDoubleSpinBox):
 	def __init__(self, value=0, max=1000, min=0, step=10, suffix="ppm"):
 		super(csSpinBox, self).__init__()
 		self.setValue(value)
@@ -71,7 +71,6 @@ class sensor(QThread):
 		self.signalArray = [0 for _ in range(200)]
 		self.timer = QTimer()
 		self.timer.timeout.connect(lambda: self.update())
-		#self.loadADCSettings()
 		self.counter = 0
 		self.timer.start(10)
 
