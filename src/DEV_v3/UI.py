@@ -829,9 +829,40 @@ class SensorGraphWindow(QWidget):
         self.b4.setButtonText("Toggle Pump")
         self.b4.clicked.connect(lambda: self.pump.toggle())
 
+        self.buttonStatus = False
+
         self.b5 = self.button()
-        self.b5.setButtonText("Home")
-        self.b5.clicked.connect(lambda: self.showHW())
+        self.b5.setButtonText("<<")
+        # self.b3.clicked.connect(lambda: self.SM.moveLeft())
+        self.b5.pressed.connect(lambda: self.move(0))
+        self.b5.released.connect(lambda: self.endMove())
+
+        self.b6 = self.button()
+        self.b6.setButtonText(">>")
+        # self.b4.clicked.connect(lambda: self.SM.moveRight())
+        self.b6.pressed.connect(lambda: self.move(1))
+        self.b6.released.connect(lambda: self.endMove())
+
+        self.b7 = self.button()
+        self.b7.setButtonText("Home")
+        self.b7.clicked.connect(lambda: self.showHW())
+
+    def move(self, direction):
+        if direction == 0:
+            self.SM.stepDirection = stepper.BACKWARD
+        else:
+            self.SM.stepDirection = stepper.FORWARD
+        # print("starting movement")
+        self.buttonStatus = True
+        while self.buttonStatus:
+            app.processEvents()
+            self.SM.move()
+        self.SM.motor.release()
+
+    def endMove(self):
+        self.buttonStatus = False
+        self.SM.motor.release()
+        print("Current Position: {}".format(self.SM.currentPos))
 
     def showHW(self):
         self.graphTimer.stop()
@@ -848,6 +879,8 @@ class SensorGraphWindow(QWidget):
         self.layout.addWidget(self.b3)
         self.layout.addWidget(self.b4)
         self.layout.addWidget(self.b5)
+        self.layout.addWidget(self.b6)
+        self.layout.addWidget(self.b7)
 
         self.setLayout(self.layout)
 
