@@ -238,13 +238,15 @@ class baseWindow(QWidget):
 
 	@pyqtSlot(float)
 	def updateSensor2(self, arr):
-		self.sensor2Array = self.sensor2Array[1:].append(arr)
+		self.sensor2Array = self.sensor2Array[1:]
+		self.sensor2Array.append(arr)
 		self.sensor2Plot.setData(self.timeArray, self.sensor2Array)
 		self.sensor2Label.setText("Chamber Sensor: {:.3f}".format(np.mean(self.sensor2Array[100:])))
 
 	@pyqtSlot(float)
 	def updateSensor3(self, arr):
-		self.sensor3Array = self.sensor3Array[1:].append(arr)
+		self.sensor3Array = self.sensor3Array[1:]
+		self.sensor3Array.append(arr)
 		self.sensor3Plot.setData(self.timeArray, self.sensor3Array)
 		self.sensor3Label.setText("Baseline Sensor: {:.3f}".format(np.mean(self.sensor3Array[100:])))
 
