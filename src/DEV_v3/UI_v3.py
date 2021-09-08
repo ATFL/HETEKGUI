@@ -208,11 +208,6 @@ class baseWindow(QWidget):
 		self.SM.motor.release()
 		print("Components Loaded and turned Off")
 
-		self.sensor1 = sensor(adc=self.adc, channel=0)
-		self.sensor2 = sensor(adc=self.adc, channel=2)
-		self.sensor3 = sensor(adc=self.adc, channel=3)
-
-
 	def loadData(self):
 		self.graph = graph()
 
@@ -328,6 +323,9 @@ class purgeWindow(baseWindow):
 		self.loadUI()
 
 	def sensorSetup(self):
+		self.sensor1 = sensor(adc=self.adc, channel=0)
+		self.sensor2 = sensor(adc=self.adc, channel=2)
+		self.sensor3 = sensor(adc=self.adc, channel=3)
 		self.sensor1.mainSignal.connect(self.updateSensor1)
 		self.sensor2.mainSignal.connect(self.updateSensor2)
 		self.sensor3.mainSignal.connect(self.updateSensor3)
