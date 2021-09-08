@@ -228,6 +228,7 @@ class baseWindow(QWidget):
 
 		self.sensor1Label = QLabel()
 		self.sensor2Label = QLabel()
+		self.sensor3Label = QLabel()
 
 	@pyqtSlot(float)
 	def updateSensor1(self, arr):
