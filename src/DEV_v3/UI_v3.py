@@ -48,7 +48,7 @@ class graph(pg.PlotWidget):
 
 
 class sensor(QThread):
-	mainSignal = pyqtSignal(object)
+	mainSignal = pyqtSignal(float)
 
 	def __init__(self, shift=None, adc=None, channel=None):
 		super(sensor, self).__init__()
@@ -70,7 +70,7 @@ class sensor(QThread):
 		self.mainSignal.emit(self.signalVal)
 
 	def sVal2PPM(self):
-		return ((self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144) #  * 100
+		return float((self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144) #  * 100
 
 	def startSensor(self):
 		if not self.timer.isActive():
@@ -229,19 +229,19 @@ class baseWindow(QWidget):
 		self.sensor1Label = QLabel()
 		self.sensor2Label = QLabel()
 
-	@pyqtSlot(object)
+	@pyqtSlot(float)
 	def updateSensor1(self, arr):
 		self.sensor1Array = self.sensor1Array[1:].append(arr)
 		self.sensor1Plot.setData(self.timeArray, self.sensor1Array)
 		self.sensor1Label.setText("Microchannel Sensor: {:.3f}".format(np.mean(self.sensor1Array[100:])))
 
-	@pyqtSlot(object)
+	@pyqtSlot(float)
 	def updateSensor2(self, arr):
 		self.sensor2Array = self.sensor2Array[1:].append(arr)
 		self.sensor2Plot.setData(self.timeArray, self.sensor2Array)
 		self.sensor2Label.setText("Chamber Sensor: {:.3f}".format(np.mean(self.sensor2Array[100:])))
 
-	@pyqtSlot(object)
+	@pyqtSlot(float)
 	def updateSensor3(self, arr):
 		self.sensor3Array = self.sensor3Array[1:].append(arr)
 		self.sensor3Plot.setData(self.timeArray, self.sensor3Array)
