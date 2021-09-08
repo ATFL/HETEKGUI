@@ -231,7 +231,8 @@ class baseWindow(QWidget):
 
 	@pyqtSlot(float)
 	def updateSensor1(self, arr):
-		self.sensor1Array = self.sensor1Array[1:].append(arr)
+		self.sensor1Array = self.sensor1Array[1:]
+		self.sensor1Array.append(arr)
 		self.sensor1Plot.setData(self.timeArray, self.sensor1Array)
 		self.sensor1Label.setText("Microchannel Sensor: {:.3f}".format(np.mean(self.sensor1Array[100:])))
 
