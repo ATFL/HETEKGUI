@@ -88,55 +88,64 @@ class sensor(QThread):
 
 
 class Stepper(QThread):
-	def __init__(self, channel):
-		super(Stepper, self).__init__()
-		self.motor = channel
-		self.currentPos = 0
-		self.stepDirection = stepper.FORWARD
-		self.stepStyle = stepper.DOUBLE
-		self.motor.release()
-		# self.stepperPos = "Recover"
+    def __init__(self, channel):
+        super(Stepper, self).__init__()
+        self.motor = channel
+        self.currentPos = 0
+        self.stepDirection = stepper.FORWARD
+        self.stepStyle = stepper.SINGLE
+        self.motor.release()
+        # self.stepperMinVal = -20
+        # self.stepperMaxVal = 140
+        self.stepperPos = "Recover"
 
-	def expose(self):
-		self.stepDirection = stepper.FORWARD
-		print("Exposing")
-		self.step(370)
-		self.motor.release()
+    def expose(self):
+        if not self.stepperPos == "exposed":
+            self.stepDirection = stepper.FORWARD
+            print("Exposing")
+            self.step(370)
+            self.stepperPos = "exposed"
+        self.motor.release()
 
-	def recover(self):
-		self.stepDirection = stepper.BACKWARD
-		self.step(370)
-		print("Recovering")
-		self.motor.release()
+    def recover(self):
+        if not self.stepperPos == "recovered":
+            self.stepDirection = stepper.BACKWARD
+            self.step(370)
+            print("Recovering")
+            self.stepperPos = "recovered"
+        self.motor.release()
 
-	def moveLeft(self):
-		self.stepDirection = stepper.FORWARD
-		self.step(10)
-		print("<<")
+    def moveLeft(self):
+        self.stepDirection = stepper.FORWARD
+        self.step(10)
+        print("<<")
+        self.stepperPos = "mid"
 
-	def moveRight(self):
-		self.stepDirection = stepper.BACKWARD
-		self.step(10)
-		print(">>")
+    def moveRight(self):
+        self.stepDirection = stepper.BACKWARD
+        self.step(10)
+        print(">>")
+        self.stepperPos = "mid"
 
-	def zero(self):
-		self.currentPos = 0
+    def zero(self):
+        self.currentPos = 0
+        self.stepperPos = "recovered"
 
-	def step(self, steps):
-		for i in range(steps):
-			QTimer.singleShot(10, lambda: self.motor.onestep(direction=self.stepDirection, style=self.stepStyle))
-			if self.stepDirection == stepper.FORWARD:
-				self.currentPos = self.currentPos + 1
-			else:
-				self.currentPos = self.currentPos - 1
-		self.motor.release()
+    def step(self, steps):
+        for i in range(steps):
+            QTimer.singleShot(10, lambda: self.motor.onestep(direction=self.stepDirection, style=self.stepStyle))
+            if self.stepDirection == stepper.FORWARD:
+                self.currentPos = self.currentPos + 1
+            else:
+                self.currentPos = self.currentPos - 1
+        self.motor.release()
 
-	def move(self):
-		self.motor.onestep(direction=self.stepDirection, style=self.stepStyle)
-		if self.stepDirection == stepper.FORWARD:
-			self.currentPos = self.currentPos + 1
-		else:
-			self.currentPos = self.currentPos - 1
+    def move(self):
+        self.motor.onestep(direction=self.stepDirection, style=self.stepStyle)
+        if self.stepDirection == stepper.FORWARD:
+            self.currentPos = self.currentPos + 1
+        else:
+            self.currentPos = self.currentPos - 1
 
 
 class MOTOR(QThread):
@@ -250,13 +259,27 @@ class baseWindow(QWidget):
 		self.sensor3Plot.setData(self.timeArray, self.sensor3Array)
 		self.sensor3Label.setText("Baseline Sensor: {:.3f}".format(np.mean(self.sensor3Array[100:])))
 
+	def loadNewWindow(self, win):
+		if win == 0:
+			self.nw = purgeWindow
+		elif win == 1:
+			self.nw = testWindow
+		elif win == 2:
+			self.nw = graphWindow
+		elif win == 3:
+			self.nw = settingsWindow
+		else:
+			self.nw = homeWindow
+		self.nw.show()
+		self.close()
+
 
 class homeWindow(baseWindow, QWidget):
 	def __init__(self):
 		super(homeWindow, self).__init__()
 		self.loadData()
-		# self.loadComponents()
-		# self.HWButtonSetup()
+		self.loadComponents()
+		self.HWButtonSetup()
 		self.loadUI()
 
 	def HWButtonSetup(self):
@@ -275,20 +298,6 @@ class homeWindow(baseWindow, QWidget):
 
 		self.b5 = button("Exit")
 		self.b5.clicked.connect(lambda: self.exitFunction())
-
-	def loadNewWindow(self, win):
-		if win == 0:
-			self.nw = purgeWindow
-		elif win == 1:
-			self.nw = testWindow
-		elif win == 2:
-			self.nw = graphWindow
-		elif win == 3:
-			self.nw = settingsWindow
-		else:
-			self.nw = homeWindow
-		self.nw.show()
-		self.close()
 
 	def exitFunction(self):
 		self.exitMsg = QMessageBox()
@@ -313,14 +322,62 @@ class homeWindow(baseWindow, QWidget):
 		self.setLayout(self.layout)
 
 
-class purgeWindow(baseWindow):
+class purgeWindow(baseWindow, QWidget):
 	def __init__(self):
 		super(purgeWindow, self).__init__()
 		self.loadData()
 		self.loadComponents()
 		self.buttonSetup()
 		self.timerSetup()
-		self.UI()
+		self.loadUI()
+
+	def buttonSetup(self):
+		self.b1 = button("Purge")
+		self.b1.clicked.connect(lambda: self.purge())
+
+		self.b2 = button("Stop")
+		self.b2.clicked.connect(lambda: self.stop())
+
+		self.b3 = button("Start Test")
+		self.b3.clicked.connect(lambda: self.loadNewWindow(1))
+
+		self.b4 = button("Home")
+		self.b4.clicked.connect(lambda: self.loadNewWindow(6))
+
+	def timerSetup(self):
+		self.purgeTimer = QTimer()
+		self.purgeTimer2 = QTimer()
+		self.purgeTimer.setSingleShot(True)
+		self.purgeTimer2.setSingleShot(True)
+		self.purgeTimer.timeout.connect(lambda: self.SM.expose())
+		self.purgeTimer2.timeout.connect(lambda: self.stop())
+		self.purge1Time = 30000  # normally 20000
+		self.purge2Time = 45000  # normally 30000
+
+	def purge(self):
+		self.valve.activate()
+		self.pump.activate()
+
+		self.purgeTimer.start(self.purge1Time)
+		self.purgeTimer2.start(self.purge2Time)
+
+	def stop(self):
+		if self.purgeTimer.isActive():
+			self.purgeTimer.stop()
+		if self.purgeTimer2.isActive():
+			self.purgeTimer.stop()
+		self.pump.deactivate()
+		self.valve.deactivate()
+		self.SM.recover()
+
+	def loadUI(self):
+		self.layout = QGridLayout()
+		self.layout.addWidget(self.graph)
+		self.layout.addWidget(self.b1)
+		self.layout.addWidget(self.b2)
+		self.layout.addWidget(self.b3)
+		self.layout.addWidget(self.b4)
+		self.setLayout(self.layout)
 
 
 if __name__ == "__main__":
