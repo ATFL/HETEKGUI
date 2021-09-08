@@ -76,11 +76,7 @@ class sensor(QThread):
 
 	def update(self):
 		self.signalArray = self.signalArray[1:]
-		#try:
-		#self.signalArray.append(round(((self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144), 3))
 		self.signalArray.append(self.sVal2PPM())
-		#self.signalArray.append(self.signalArray[-1])
-
 		self.mainSignal.emit(self.signalArray)
 
 	def sVal2PPM(self):
@@ -108,43 +104,34 @@ class Stepper(QThread):
 		self.motor = channel
 		self.currentPos = 0
 		self.stepDirection = stepper.FORWARD
-		self.stepStyle = stepper.SINGLE
+		self.stepStyle = stepper.DOUBLE
 		self.motor.release()
-		self.stepperMinVal = -20
-		self.stepperMaxVal = 140
-		self.stepperPos = "Recover"
+		# self.stepperPos = "Recover"
 
 	def expose(self):
-		if not self.stepperPos == "exposed":
-			self.stepDirection = stepper.FORWARD
-			print("Exposing")
-			self.step(370)
-			self.stepperPos = "exposed"
+		self.stepDirection = stepper.FORWARD
+		print("Exposing")
+		self.step(370)
 		self.motor.release()
 
 	def recover(self):
-		if not self.stepperPos == "recovered":
-			self.stepDirection = stepper.BACKWARD
-			self.step(370)
-			print("Recovering")
-			self.stepperPos = "recovered"
+		self.stepDirection = stepper.BACKWARD
+		self.step(370)
+		print("Recovering")
 		self.motor.release()
 
 	def moveLeft(self):
 		self.stepDirection = stepper.FORWARD
 		self.step(10)
 		print("<<")
-		self.stepperPos = "mid"
 
 	def moveRight(self):
 		self.stepDirection = stepper.BACKWARD
 		self.step(10)
 		print(">>")
-		self.stepperPos = "mid"
 
 	def zero(self):
 		self.currentPos = 0
-		self.stepperPos = "recovered"
 
 	def step(self, steps):
 		for i in range(steps):
@@ -161,10 +148,6 @@ class Stepper(QThread):
 			self.currentPos = self.currentPos + 1
 		else:
 			self.currentPos = self.currentPos - 1
-
-	def move4Time(self, runtime):
-		self.expose()
-		QTimer.singleShot(runtime*1000, lambda: self.recover())
 
 
 class MOTOR(QThread):
@@ -291,7 +274,6 @@ class HomeWindow(QWidget):
 		else:
 			QApplication.closeAllWindows()
 
-
 	def HWUI(self):
 		self.layout = QGridLayout()
 
@@ -309,17 +291,10 @@ class PurgeWindow(QWidget):
 	def __init__(self):
 		super(PurgeWindow, self).__init__()
 		self.loadWindowSettings()
-		self.loadComponents()
 		self.loadGraphSettings()
+		self.loadComponents()
 		self.PWButtonSetup()
-		self.purgeTimer = QTimer()
-		self.purgeTimer2 = QTimer()
-		self.purgeTimer.setSingleShot(True)
-		self.purgeTimer2.setSingleShot(True)
-		self.purgeTimer.timeout.connect(lambda: self.SM.expose())
-		self.purgeTimer2.timeout.connect(lambda: self.stop())
-		self.purge1Time = 20000 # normally 20000
-		self.purge2Time = 30000 # normally 30000
+		self.timerSetup()
 		self.PWUI()
 
 	def loadWindowSettings(self):
@@ -354,6 +329,16 @@ class PurgeWindow(QWidget):
 		self.SM.motor.release()
 
 		print("Components Loaded")
+
+	def timerSetup(self):
+		self.purgeTimer = QTimer()
+		self.purgeTimer2 = QTimer()
+		self.purgeTimer.setSingleShot(True)
+		self.purgeTimer2.setSingleShot(True)
+		self.purgeTimer.timeout.connect(lambda: self.SM.expose())
+		self.purgeTimer2.timeout.connect(lambda: self.stop())
+		self.purge1Time = 20000  # normally 20000
+		self.purge2Time = 30000  # normally 30000
 
 	def PWButtonSetup(self):
 		self.b1 = button()
