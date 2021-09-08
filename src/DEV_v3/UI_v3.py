@@ -251,7 +251,7 @@ class baseWindow(QWidget):
 		self.sensor3Label.setText("Baseline Sensor: {:.3f}".format(np.mean(self.sensor3Array[100:])))
 
 
-class homeWindow(baseWindow):
+class homeWindow(baseWindow, QWidget):
 	def __init__(self):
 		super(homeWindow, self).__init__()
 		# self.loadData()
