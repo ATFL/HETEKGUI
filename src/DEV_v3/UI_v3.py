@@ -261,7 +261,7 @@ class baseWindow(QWidget):
 
 	def loadNewWindow(self, win):
 		if win == 0:
-			self.nw = purgeWindow
+			self.nw = purgeWindow()
 		elif win == 1:
 			self.nw = testWindow
 		elif win == 2:
