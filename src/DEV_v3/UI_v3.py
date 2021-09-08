@@ -255,8 +255,8 @@ class homeWindow(baseWindow, QWidget):
 	def __init__(self):
 		super(homeWindow, self).__init__()
 		self.loadData()
-		self.loadComponents()
-		self.HWButtonSetup()
+		# self.loadComponents()
+		# self.HWButtonSetup()
 		self.loadUI()
 
 	def HWButtonSetup(self):
@@ -324,6 +324,6 @@ class purgeWindow(baseWindow):
 
 
 if __name__ == "__main__":
-	UI = homeWindow().show()
+	UI = baseWindow().show()
 	sys.exit(app.exec_())
 
