@@ -208,15 +208,15 @@ class baseWindow(QWidget):
 		self.SM.motor.release()
 		print("Components Loaded and turned Off")
 
-		self.sensor1 = sensor(adc=self.adc, channel=0)
-		self.sensor2 = sensor(adc=self.adc, channel=2)
-		self.sensor3 = sensor(adc=self.adc, channel=3)
-		self.sensor1.mainSignal.connect(self.updateSensor1)
-		self.sensor2.mainSignal.connect(self.updateSensor2)
-		self.sensor3.mainSignal.connect(self.updateSensor3)
-		self.sensor1.start()
-		self.sensor2.start()
-		self.sensor3.start()
+		# self.sensor1 = sensor(adc=self.adc, channel=0)
+		# self.sensor2 = sensor(adc=self.adc, channel=2)
+		# self.sensor3 = sensor(adc=self.adc, channel=3)
+		# self.sensor1.mainSignal.connect(self.updateSensor1)
+		# self.sensor2.mainSignal.connect(self.updateSensor2)
+		# self.sensor3.mainSignal.connect(self.updateSensor3)
+		# self.sensor1.start()
+		# self.sensor2.start()
+		# self.sensor3.start()
 
 	def loadData(self):
 		self.graph = graph()
@@ -274,11 +274,11 @@ class baseWindow(QWidget):
 		self.close()
 
 
-class homeWindow(baseWindow, QWidget):
+class homeWindow(baseWindow):
 	def __init__(self):
 		super(homeWindow, self).__init__()
 		self.loadData()
-		# self.loadComponents()
+		self.loadComponents()
 		self.HWButtonSetup()
 		self.loadUI()
 
@@ -322,7 +322,7 @@ class homeWindow(baseWindow, QWidget):
 		self.setLayout(self.layout)
 
 
-class purgeWindow(QWidget, baseWindow):
+class purgeWindow(baseWindow):
 	def __init__(self):
 		super(purgeWindow, self).__init__()
 		self.loadData()
