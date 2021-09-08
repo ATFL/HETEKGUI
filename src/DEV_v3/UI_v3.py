@@ -322,7 +322,7 @@ class homeWindow(baseWindow, QWidget):
 		self.setLayout(self.layout)
 
 
-class purgeWindow(baseWindow, QWidget):
+class purgeWindow(QWidget, baseWindow):
 	def __init__(self):
 		super(purgeWindow, self).__init__()
 		self.loadData()
