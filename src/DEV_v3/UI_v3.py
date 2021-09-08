@@ -278,15 +278,15 @@ class homeWindow(baseWindow):
 
 	def loadNewWindow(self, win):
 		if win == 0:
-			self.nw = purgeWindow()
+			self.nw = purgeWindow
 		elif win == 1:
-			self.nw = testWindow()
+			self.nw = testWindow
 		elif win == 2:
-			self.nw = graphWindow()
+			self.nw = graphWindow
 		elif win == 3:
-			self.nw = settingsWindow()
+			self.nw = settingsWindow
 		else:
-			self.nw = homeWindow()
+			self.nw = homeWindow
 		self.nw.show()
 		self.close()
 
