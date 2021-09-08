@@ -254,8 +254,8 @@ class baseWindow(QWidget):
 class homeWindow(baseWindow):
 	def __init__(self):
 		super(homeWindow, self).__init__()
-		self.loadData()
-		self.loadComponents()
+		# self.loadData()
+		# self.loadComponents()
 		self.HWButtonSetup()
 		self.loadUI()
 
