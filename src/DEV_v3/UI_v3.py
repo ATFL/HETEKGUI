@@ -208,15 +208,10 @@ class baseWindow(QWidget):
 		self.SM.motor.release()
 		print("Components Loaded and turned Off")
 
-		# self.sensor1 = sensor(adc=self.adc, channel=0)
-		# self.sensor2 = sensor(adc=self.adc, channel=2)
-		# self.sensor3 = sensor(adc=self.adc, channel=3)
-		# self.sensor1.mainSignal.connect(self.updateSensor1)
-		# self.sensor2.mainSignal.connect(self.updateSensor2)
-		# self.sensor3.mainSignal.connect(self.updateSensor3)
-		# self.sensor1.start()
-		# self.sensor2.start()
-		# self.sensor3.start()
+		self.sensor1 = sensor(adc=self.adc, channel=0)
+		self.sensor2 = sensor(adc=self.adc, channel=2)
+		self.sensor3 = sensor(adc=self.adc, channel=3)
+
 
 	def loadData(self):
 		self.graph = graph()
@@ -263,11 +258,11 @@ class baseWindow(QWidget):
 		if win == 0:
 			self.nw = purgeWindow()
 		elif win == 1:
-			self.nw = testWindow
+			self.nw = testWindow()
 		elif win == 2:
-			self.nw = graphWindow
+			self.nw = graphWindow()
 		elif win == 3:
-			self.nw = settingsWindow
+			self.nw = settingsWindow()
 		else:
 			self.nw = homeWindow
 		self.nw.show()
@@ -327,9 +322,18 @@ class purgeWindow(baseWindow):
 		super(purgeWindow, self).__init__()
 		self.loadData()
 		self.loadComponents()
+		self.sensorSetup()
 		self.buttonSetup()
 		self.timerSetup()
 		self.loadUI()
+
+	def sensorSetup(self):
+		self.sensor1.mainSignal.connect(self.updateSensor1)
+		self.sensor2.mainSignal.connect(self.updateSensor2)
+		self.sensor3.mainSignal.connect(self.updateSensor3)
+		self.sensor1.start()
+		self.sensor2.start()
+		self.sensor3.start()
 
 	def buttonSetup(self):
 		self.b1 = button("Purge")
@@ -372,11 +376,11 @@ class purgeWindow(baseWindow):
 
 	def loadUI(self):
 		self.layout = QGridLayout()
-		self.layout.addWidget(self.graph)
-		self.layout.addWidget(self.b1)
-		self.layout.addWidget(self.b2)
-		self.layout.addWidget(self.b3)
-		self.layout.addWidget(self.b4)
+		self.layout.addWidget(self.graph, 0, 0, 4, 4)
+		self.layout.addWidget(self.b1, 4, 0, 1, 1)
+		self.layout.addWidget(self.b2, 5, 0, 1, 1)
+		self.layout.addWidget(self.b3, 4, 2, 1, 1)
+		self.layout.addWidget(self.b4, 5, 2, 1, 1)
 		self.setLayout(self.layout)
 
 
