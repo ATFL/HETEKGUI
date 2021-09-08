@@ -58,7 +58,7 @@ class sensor(QThread):
 		self.channel = channel
 		self.GAIN = 2 / 3
 
-		self.signalVal = [0 for _ in range(200)]
+		self.signalVal = 0
 		self.timer = QTimer()
 		self.timer.timeout.connect(lambda: self.update())
 		self.counter = 0
