@@ -66,7 +66,6 @@ class sensor(QThread):
 
 	def update(self):
 		self.signalVal = self.sVal2PPM()
-		print(type(self.signalVal))
 		self.mainSignal.emit(self.signalVal)
 
 	def sVal2PPM(self):
@@ -252,10 +251,79 @@ class baseWindow(QWidget):
 		self.sensor3Label.setText("Baseline Sensor: {:.3f}".format(np.mean(self.sensor3Array[100:])))
 
 
+class homeWindow(baseWindow):
+	def __init__(self):
+		super(homeWindow, self).__init__()
+		self.loadData()
+		self.loadComponents()
+		self.HWButtonSetup()
+		self.loadUI()
+
+	def HWButtonSetup(self):
+		self.b1 = button("Purge")
+		self.b1.clicked.connect(lambda: self.loadNewWindow(0))
+
+		self.b2 = button("Start Test")
+		self.b2.clicked.connect(lambda: self.loadNewWindow(1))
+
+		self.b3 = button("Graph")
+		self.b3.clicked.connect(lambda: self.loadNewWindow(2))
+
+		self.b4 = button()
+		self.b4.setButtonText("Settings")
+		self.b4.clicked.connect(lambda: self.loadNewWindow(3))
+
+		self.b5 = button("Exit")
+		self.b5.clicked.connect(lambda: self.exitFunction())
+
+	def loadNewWindow(self, win):
+		if win == 0:
+			self.nw = purgeWindow()
+		elif win == 1:
+			self.nw = testWindow()
+		elif win == 2:
+			self.nw = graphWindow()
+		elif win == 3:
+			self.nw = settingsWindow()
+		else:
+			self.nw = homeWindow()
+		self.nw.show()
+		self.close()
+
+	def exitFunction(self):
+		self.exitMsg = QMessageBox()
+		self.exitMsg.setText("Do you Want to shutdown?")
+		self.exitMsg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+		self.em = self.exitMsg.exec()
+		if self.em == QMessageBox.Yes:
+			QApplication.closeAllWindows()
+			os.system("sudo shutdown now")
+		else:
+			QApplication.closeAllWindows()
+
+	def loadUI(self):
+		self.layout = QGridLayout()
+
+		self.layout.addWidget(self.b1)
+		self.layout.addWidget(self.b2)
+		self.layout.addWidget(self.b3)
+		self.layout.addWidget(self.b4)
+		self.layout.addWidget(self.b5)
+
+		self.setLayout(self.layout)
+
+
+class purgeWindow(baseWindow):
+	def __init__(self):
+		super(purgeWindow, self).__init__()
+		self.loadData()
+		self.loadComponents()
+		self.buttonSetup()
+		self.timerSetup()
+		self.UI()
+
+
 if __name__ == "__main__":
-	UI = baseWindow()
-	UI.loadData()
-	UI.loadComponents()
-	UI.show()
+	UI = homeWindow().show()
 	sys.exit(app.exec_())
 
