@@ -62,7 +62,6 @@ class sensor(QThread):
 		self.timer = QTimer()
 		self.timer.timeout.connect(lambda: self.update())
 		self.counter = 0
-		self.timer.start(10)
 
 	def update(self):
 		self.signalVal = self.sVal2PPM()
@@ -73,7 +72,7 @@ class sensor(QThread):
 
 	def startSensor(self):
 		if not self.timer.isActive():
-			self.timer.start(100)
+			self.timer.start(10)
 
 	def stopSensor(self):
 		if self.timer.isActive():
@@ -259,7 +258,7 @@ class baseWindow(QWidget):
 		elif win == 3:
 			self.nw = settingsWindow()
 		else:
-			self.nw = homeWindow
+			self.nw = homeWindow()
 		self.nw.show()
 		self.close()
 
@@ -332,6 +331,9 @@ class purgeWindow(baseWindow):
 		self.sensor1.start()
 		self.sensor2.start()
 		self.sensor3.start()
+		self.sensor1.startSensor()
+		self.sensor2.startSensor()
+		self.sensor3.startSensor()
 
 	def buttonSetup(self):
 		self.b1 = button("Purge")
@@ -380,6 +382,25 @@ class purgeWindow(baseWindow):
 		self.layout.addWidget(self.b3, 4, 2, 1, 1)
 		self.layout.addWidget(self.b4, 5, 2, 1, 1)
 		self.setLayout(self.layout)
+
+
+class testWindow(baseWindow):
+	def __init__(self):
+		super(testWindow, self).__init__()
+		self.loadData()
+		self.loadComponents()
+		self.sensorSetup()
+
+	def sensorSetup(self):
+		self.sensor1 = sensor(adc=self.adc, channel=0)
+		self.sensor2 = sensor(adc=self.adc, channel=2)
+		self.sensor3 = sensor(adc=self.adc, channel=3)
+		self.sensor1.mainSignal.connect(self.updateSensor1)
+		self.sensor2.mainSignal.connect(self.updateSensor2)
+		self.sensor3.mainSignal.connect(self.updateSensor3)
+		self.sensor1.start()
+		self.sensor2.start()
+		self.sensor3.start()
 
 
 if __name__ == "__main__":
