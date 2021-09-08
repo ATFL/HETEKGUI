@@ -66,6 +66,7 @@ class sensor(QThread):
 
 	def update(self):
 		self.signalVal = self.sVal2PPM()
+		print(type(self.signalVal))
 		self.mainSignal.emit(self.signalVal)
 
 	def sVal2PPM(self):
