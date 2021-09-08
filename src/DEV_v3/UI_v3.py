@@ -381,6 +381,6 @@ class purgeWindow(baseWindow, QWidget):
 
 
 if __name__ == "__main__":
-	UI = baseWindow().show()
+	UI = homeWindow().show()
 	sys.exit(app.exec_())
 
