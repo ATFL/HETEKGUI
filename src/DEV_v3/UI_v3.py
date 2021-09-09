@@ -640,6 +640,9 @@ class graphWindow(baseWindow):
 		self.layout.addWidget(self.b6, 4, 3, 1, 1)
 		self.layout.addWidget(self.b7, 5, 2, 1, 1)
 		self.layout.addWidget(self.b8, 5, 3, 1, 1)
+		self.layout.addWidget(self.sensor1Label, 1, 4, 1, 1)
+		self.layout.addWidget(self.sensor1Label, 2, 4, 1, 1)
+		self.layout.addWidget(self.sensor1Label, 3, 4, 1, 1)
 
 		self.setLayout(self.layout)
 
