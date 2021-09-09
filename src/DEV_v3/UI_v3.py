@@ -404,7 +404,7 @@ class testWindow(baseWindow):
 		self.sensor1 = sensor(adc=self.adc, channel=0)
 		self.sensor2 = sensor(adc=self.adc, channel=2)
 		self.sensor3 = sensor(adc=self.adc, channel=3)
-		self.sensor1.mainSignal.connect(self.updateSensor1)
+		self.sensor1.mainSignal.connect(self.updateSensor1v2)
 		self.sensor2.mainSignal.connect(self.updateSensor2)
 		self.sensor3.mainSignal.connect(self.updateSensor3)
 		self.sensor1.start()
@@ -527,6 +527,14 @@ class testWindow(baseWindow):
 			self.exposeTimer.stop()
 		if self.recoveryTimer.isActive():
 			self.recoveryTimer.stop()
+
+	@pyqtSlot(float)
+	def updateSensor1v2(self, arr):
+		self.timeArray2.append(self.timeArray2[-1]+0.01)
+		self.sensor1Array = self.sensor1Array[1:]
+		self.sensor1Array.append(arr)
+		self.sensor1Plot.setData(self.timeArray, self.sensor1Array)
+		self.sensor1Label.setText("Microchannel Sensor: {:.3f}".format(np.mean(self.sensor1Array[100:])))
 
 	def loadUI(self):
 		self.layout = QGridLayout()
