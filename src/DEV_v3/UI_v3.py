@@ -433,6 +433,9 @@ class testWindow(baseWindow):
 		self.sensor1Label = QLabel()
 		self.sensor2Label = QLabel()
 		self.sensor3Label = QLabel()
+		self.sensor1Label.setStyleSheet('color: #dbd9cc')
+		self.sensor2Label.setStyleSheet('color: #dbd9cc')
+		self.sensor3Label.setStyleSheet('color: #dbd9cc')
 
 	def resetData(self):
 		self.timeArray2 = [0]
