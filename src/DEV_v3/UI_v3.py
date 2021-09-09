@@ -227,6 +227,10 @@ class baseWindow(QWidget):
 		self.sensor1Label = QLabel()
 		self.sensor2Label = QLabel()
 		self.sensor3Label = QLabel()
+		self.sensor1Label.setStyleSheet('color: #dbd9cc')
+		self.sensor2Label.setStyleSheet('color: #dbd9cc')
+		self.sensor3Label.setStyleSheet('color: #dbd9cc')
+
 
 	@pyqtSlot(float)
 	def updateSensor1(self, arr):
@@ -257,7 +261,7 @@ class baseWindow(QWidget):
 		elif win == 2:
 			self.nw = graphWindow()
 		elif win == 3:
-			self.nw = settingsWindow()
+			self.nw = homeWindow()
 		else:
 			self.nw = homeWindow()
 		self.nw.show()
@@ -641,8 +645,8 @@ class graphWindow(baseWindow):
 		self.layout.addWidget(self.b7, 5, 2, 1, 1)
 		self.layout.addWidget(self.b8, 5, 3, 1, 1)
 		self.layout.addWidget(self.sensor1Label, 1, 4, 1, 1)
-		self.layout.addWidget(self.sensor1Label, 2, 4, 1, 1)
-		self.layout.addWidget(self.sensor1Label, 3, 4, 1, 1)
+		self.layout.addWidget(self.sensor2Label, 2, 4, 1, 1)
+		self.layout.addWidget(self.sensor3Label, 3, 4, 1, 1)
 
 		self.setLayout(self.layout)
 
