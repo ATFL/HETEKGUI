@@ -104,6 +104,7 @@ class Stepper(QThread):
 			print("Exposing")
 			self.step(370)
 			self.stepperPos = "exposed"
+
 		self.motor.release()
 
 	def recover(self):
@@ -117,13 +118,13 @@ class Stepper(QThread):
 	def moveLeft(self):
 		self.stepDirection = stepper.FORWARD
 		self.step(10)
-		print("<<")
+		# print("<<")
 		self.stepperPos = "mid"
 
 	def moveRight(self):
 		self.stepDirection = stepper.BACKWARD
 		self.step(10)
-		print(">>")
+		# print(">>")
 		self.stepperPos = "mid"
 
 	def zero(self):
@@ -132,11 +133,13 @@ class Stepper(QThread):
 
 	def step(self, steps):
 		for i in range(steps):
-			QTimer.singleShot(10, lambda: self.motor.onestep(direction=self.stepDirection, style=self.stepStyle))
+			#QTimer.singleShot(10, lambda: self.motor.onestep(direction=self.stepDirection, style=self.stepStyle))
+			self.motor.onestep(direction=self.stepDirection, style=self.stepStyle)
 			if self.stepDirection == stepper.FORWARD:
 				self.currentPos = self.currentPos + 1
 			else:
 				self.currentPos = self.currentPos - 1
+			time.sleep(0.01)
 		self.motor.release()
 
 	def move(self):
