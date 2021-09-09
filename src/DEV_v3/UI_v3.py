@@ -87,67 +87,67 @@ class sensor(QThread):
 
 
 class Stepper(QThread):
-    def __init__(self, channel):
-        super(Stepper, self).__init__()
-        self.motor = channel
-        self.currentPos = 0
-        self.stepDirection = stepper.FORWARD
-        self.stepStyle = stepper.SINGLE
-        self.motor.release()
-        # self.stepperMinVal = -20
-        # self.stepperMaxVal = 140
-        self.stepperPos = "Recover"
+	def __init__(self, channel):
+		super(Stepper, self).__init__()
+		self.motor = channel
+		self.currentPos = 0
+		self.stepDirection = stepper.FORWARD
+		self.stepStyle = stepper.SINGLE
+		self.motor.release()
+		# self.stepperMinVal = -20
+		# self.stepperMaxVal = 140
+		self.stepperPos = "Recover"
 
-    def expose(self):
-        if not self.stepperPos == "exposed":
-            self.stepDirection = stepper.FORWARD
-            print("Exposing")
-            self.step(370)
-            self.stepperPos = "exposed"
-        self.motor.release()
+	def expose(self):
+		if not self.stepperPos == "exposed":
+			self.stepDirection = stepper.FORWARD
+			print("Exposing")
+			self.step(370)
+			self.stepperPos = "exposed"
+		self.motor.release()
 
-    def recover(self):
-        if not self.stepperPos == "recovered":
-            self.stepDirection = stepper.BACKWARD
-            self.step(370)
-            print("Recovering")
-            self.stepperPos = "recovered"
-        self.motor.release()
+	def recover(self):
+		if not self.stepperPos == "recovered":
+			self.stepDirection = stepper.BACKWARD
+			self.step(370)
+			print("Recovering")
+			self.stepperPos = "recovered"
+		self.motor.release()
 
-    def moveLeft(self):
-        self.stepDirection = stepper.FORWARD
-        self.step(10)
-        print("<<")
-        self.stepperPos = "mid"
+	def moveLeft(self):
+		self.stepDirection = stepper.FORWARD
+		self.step(10)
+		print("<<")
+		self.stepperPos = "mid"
 
-    def moveRight(self):
-        self.stepDirection = stepper.BACKWARD
-        self.step(10)
-        print(">>")
-        self.stepperPos = "mid"
+	def moveRight(self):
+		self.stepDirection = stepper.BACKWARD
+		self.step(10)
+		print(">>")
+		self.stepperPos = "mid"
 
-    def zero(self):
-        self.currentPos = 0
-        self.stepperPos = "recovered"
+	def zero(self):
+		self.currentPos = 0
+		self.stepperPos = "recovered"
 
-    def step(self, steps):
-        for i in range(steps):
-            QTimer.singleShot(10, lambda: self.motor.onestep(direction=self.stepDirection, style=self.stepStyle))
-            if self.stepDirection == stepper.FORWARD:
-                self.currentPos = self.currentPos + 1
-            else:
-                self.currentPos = self.currentPos - 1
-        self.motor.release()
+	def step(self, steps):
+		for i in range(steps):
+			QTimer.singleShot(10, lambda: self.motor.onestep(direction=self.stepDirection, style=self.stepStyle))
+			if self.stepDirection == stepper.FORWARD:
+				self.currentPos = self.currentPos + 1
+			else:
+				self.currentPos = self.currentPos - 1
+		self.motor.release()
 
-    def move(self):
-        self.motor.onestep(direction=self.stepDirection, style=self.stepStyle)
-        if self.stepDirection == stepper.FORWARD:
-            self.currentPos = self.currentPos + 1
-        else:
-            self.currentPos = self.currentPos - 1
+	def move(self):
+		self.motor.onestep(direction=self.stepDirection, style=self.stepStyle)
+		if self.stepDirection == stepper.FORWARD:
+			self.currentPos = self.currentPos + 1
+		else:
+			self.currentPos = self.currentPos - 1
 
 
-class MOTOR(QThread):
+class MOTOR(QWidget):
 	def __init__(self, channel, name, throttleVal):
 		super(MOTOR, self).__init__()
 		self.motor = channel
@@ -208,6 +208,7 @@ class baseWindow(QWidget):
 		print("Components Loaded and turned Off")
 
 	def loadData(self):
+		print("This is in the parent class")
 		self.graph = graph()
 
 		self.timeArray = list(range(200))
@@ -316,6 +317,7 @@ class purgeWindow(baseWindow):
 		super(purgeWindow, self).__init__()
 		self.loadData()
 		self.loadComponents()
+		self.SM.start()
 		self.sensorSetup()
 		self.buttonSetup()
 		self.timerSetup()
@@ -379,8 +381,11 @@ class purgeWindow(baseWindow):
 		self.layout.addWidget(self.graph, 0, 0, 4, 4)
 		self.layout.addWidget(self.b1, 4, 0, 1, 1)
 		self.layout.addWidget(self.b2, 5, 0, 1, 1)
-		self.layout.addWidget(self.b3, 4, 2, 1, 1)
-		self.layout.addWidget(self.b4, 5, 2, 1, 1)
+		self.layout.addWidget(self.b3, 4, 1, 1, 1)
+		self.layout.addWidget(self.b4, 5, 1, 1, 1)
+		self.layout.addWidget(self.sensor1Label, 4, 2, 1, 1)
+		self.layout.addWidget(self.sensor2Label, 5, 2, 1, 1)
+		self.layout.addWidget(self.sensor3Label, 4, 3, 1, 1)
 		self.setLayout(self.layout)
 
 
@@ -389,7 +394,10 @@ class testWindow(baseWindow):
 		super(testWindow, self).__init__()
 		self.loadData()
 		self.loadComponents()
+		self.SM.start()
 		self.sensorSetup()
+		self.loadTimers()
+		self.buttonSetup()
 
 	def sensorSetup(self):
 		self.sensor1 = sensor(adc=self.adc, channel=0)
@@ -401,6 +409,134 @@ class testWindow(baseWindow):
 		self.sensor1.start()
 		self.sensor2.start()
 		self.sensor3.start()
+		self.sensor1.startSensor()
+		self.sensor2.startSensor()
+		self.sensor3.startSensor()
+
+	def loadData(self):
+		self.graph = graph()
+		print("This is in the child class")
+		self.resetData()
+		self.mcc = pg.mkPen(color=(47, 209, 214), width=2)
+		self.blc = pg.mkPen(color=(127, 83, 181), width=2, style=QtCore.Qt.DotLine)
+		self.sensor1Plot = self.graph.plot(self.timeArray2, self.sensor1Array, pen=self.mcc)
+		self.sensor2Plot = self.graph.plot(self.timeArray2, self.sensor2Array, pen='r')
+		self.sensor3Plot = self.graph.plot(self.timeArray2, self.sensor3Array, pen=self.blc)
+
+		self.graph.setYRange(0, 5)
+
+		self.sensor1Label = QLabel()
+		self.sensor2Label = QLabel()
+		self.sensor3Label = QLabel()
+
+	def resetData(self):
+		self.timeArray2 = [0]
+		self.sensor1Array = [self.sensor1.read()]
+		self.sensor2Array = [self.sensor2.read()]
+		self.sensor3Array = [self.sensor3.read()]
+
+	def loadTimers(self):
+		self.path = os.getcwd()
+		self.dataPath = "{}/data/".format(self.path)
+
+		self.sampleCollectTime = 30000  # normally 20000
+		self.exposeTime = 10000  # normally 10000
+		self.recoverTime = 50000  # normally 50000
+		self.endTestTime = 200000  # normally 120000
+
+		self.sampleCollectTimer = QTimer()
+		self.sampleCollectTimer.setSingleShot(True)
+		self.sampleCollectTimer.timeout.connect(lambda: self.startDataCollection())
+
+		self.testTimer = QTimer()
+		self.testTimer.setSingleShot(True)
+		self.testTimer.timeout.connect(lambda: self.endTest())
+
+		self.exposeTimer = QTimer()
+		self.exposeTimer.setSingleShot(True)
+		self.exposeTimer.timeout.connect(lambda: self.SM.expose())
+
+		self.recoveryTimer = QTimer()
+		self.recoveryTimer.setSingleShot(True)
+		self.recoveryTimer.timeout.connect(lambda: self.SM.recover())
+
+	def buttonSetup(self):
+		self.b1 = button("Start")
+		self.b1.clicked.connect(lambda: self.startTest())
+
+		self.b2 = button("Stop")
+		self.b2.clicked.connect(lambda: self.stop())
+
+		self.b3 = button("Home")
+		self.b3.clicked.connect(lambda: self.loadNewWindow(6))
+
+	def startTest(self):
+		# STEP 1: PURGE TO FILL
+		self.b1.setDisabled(True)
+		self.b3.setDisabled(True)
+		self.valve.activate()
+		self.pump.activate()
+		self.sampleCollectTimer.start(self.sampleCollectTime)
+
+	def startDataCollection(self):
+		# STEP 2: Purge Done, Starting test
+		self.pump.deactivate()
+		self.valve.deactivate()
+		self.resetData()
+		self.testTimer.start(self.endTestTime)
+		self.exposeTimer.start(self.exposeTime)
+		self.recoveryTimer.start(self.recoverTime)
+
+	def endTest(self):
+		self.stop()
+		self.filename = "d4v3_{}.csv".format(datetime.now().strftime('%m%d%H%M%S'))
+		self.filenameTotal = self.dataPath + self.filename
+		self.stackedArray = [self.timeArray, self.sensor1Array, self.sensor2Array, self.sensor3Array]
+		self.save = self.askSave()
+		if self.save == QMessageBox.Ok:
+			self.saveData()
+		self.b3.setDisabled(False)
+
+	def askSave(self):
+		self.saveMsg = QMessageBox()
+		self.saveMsg.setIcon(QMessageBox.Information)
+		self.saveMsg.setText("Do you want to save the data?")
+		self.saveMsg.setInformativeText("File will be saved as: {}".format(self.filename))
+		self.saveMsg.setWindowTitle("Save Data")
+		self.saveMsg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+		return self.saveMsg.exec()
+
+	def saveData(self):
+		np.savetxt(self.filenameTotal, self.stackedArray, fmt='%.10f', delimiter=',')
+		self.saveMessageEnd = QMessageBox()
+		self.saveMessageEnd.setIcon(QMessageBox.Information)
+		self.saveMessageEnd.setText("Saved")
+		self.saveMessageEnd.setInformativeText("File Saved as: {}".format(self.filename))
+		self.saveMessageEnd.setStandardButtons(QMessageBox.Ok)
+
+	def stop(self):
+		self.pump.deactivate()
+		self.valve.deactivate()
+		self.SM.recover()
+		if self.sampleCollectTimer.isActive():
+			self.sampleCollectTimer.stop()
+		if self.testTimer.isActive():
+			self.testTimer.stop()
+		if self.exposeTimer.isActive():
+			self.exposeTimer.stop()
+		if self.recoveryTimer.isActive():
+			self.recoveryTimer.stop()
+
+	def loadUI(self):
+		self.layout = QGridLayout()
+		self.layout.addWidget(self.graph, 0, 0, 4, 4)
+		self.layout.addWidget(self.b1, 4, 0, 1, 1)
+		self.layout.addWidget(self.b2, 4, 1, 1, 1)
+		self.layout.addWidget(self.b3, 4, 2, 1, 1)
+		self.layout.addWidget(self.sensor1Label, 5, 0, 1, 1)
+		self.layout.addWidget(self.sensor2Label, 5, 1, 1, 1)
+		self.layout.addWidget(self.sensor3Label, 5, 2, 1, 1)
+		self.setLayout(self.layout)
 
 
 if __name__ == "__main__":
