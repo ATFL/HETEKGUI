@@ -133,6 +133,7 @@ class Stepper(QThread):
 
 	def step(self, steps):
 		for i in range(steps):
+			app.processEvents()
 			#QTimer.singleShot(10, lambda: self.motor.onestep(direction=self.stepDirection, style=self.stepStyle))
 			self.motor.onestep(direction=self.stepDirection, style=self.stepStyle)
 			if self.stepDirection == stepper.FORWARD:
