@@ -468,6 +468,9 @@ class testWindow(baseWindow):
 		self.recoveryTimer.setSingleShot(True)
 		self.recoveryTimer.timeout.connect(lambda: self.SM.recover())
 
+	def collectBaseline(self):
+
+
 	def buttonSetup(self):
 		self.b1 = button("Start")
 		self.b1.clicked.connect(lambda: self.startTest())
@@ -534,6 +537,7 @@ class testWindow(baseWindow):
 		if self.recoveryTimer.isActive():
 			self.recoveryTimer.stop()
 		self.b3.setDisabled(False)
+		self.SM.motor.release()
 
 	@pyqtSlot(float)
 	def updateSensor1v2(self, arr):
