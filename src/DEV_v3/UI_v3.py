@@ -633,7 +633,7 @@ class graphWindow(baseWindow):
 		while self.buttonStatus:
 			app.processEvents()
 			self.SM.move()
-		self.SM.motor.release()
+		#self.SM.motor.release()
 
 	def endMove(self):
 		self.buttonStatus = False
