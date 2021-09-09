@@ -392,12 +392,13 @@ class purgeWindow(baseWindow):
 class testWindow(baseWindow):
 	def __init__(self):
 		super(testWindow, self).__init__()
+		self.sensorSetup()
 		self.loadData()
 		self.loadComponents()
 		self.SM.start()
-		self.sensorSetup()
 		self.loadTimers()
 		self.buttonSetup()
+		self.loadUI()
 
 	def sensorSetup(self):
 		self.sensor1 = sensor(adc=self.adc, channel=0)
