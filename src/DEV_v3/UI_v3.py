@@ -499,7 +499,7 @@ class testWindow(baseWindow):
 		self.stop()
 		self.filename = "d4v3_{}.csv".format(datetime.now().strftime('%m%d%H%M%S'))
 		self.filenameTotal = self.dataPath + self.filename
-		self.stackedArray = [self.timeArray, self.sensor1Array, self.sensor2Array, self.sensor3Array]
+		self.stackedArray = [self.timeArray2, self.sensor1Array, self.sensor2Array, self.sensor3Array]
 		self.save = self.askSave()
 		if self.save == QMessageBox.Ok:
 			self.saveData()
