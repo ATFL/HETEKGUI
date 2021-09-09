@@ -432,9 +432,9 @@ class testWindow(baseWindow):
 
 	def resetData(self):
 		self.timeArray2 = [0]
-		self.sensor1Array = [self.sensor1.read()]
-		self.sensor2Array = [self.sensor2.read()]
-		self.sensor3Array = [self.sensor3.read()]
+		self.sensor1Array = [self.sensor1.sVal2PPM()]
+		self.sensor2Array = [self.sensor2.sVal2PPM()]
+		self.sensor3Array = [self.sensor3.sVal2PPM()]
 
 	def loadTimers(self):
 		self.path = os.getcwd()
