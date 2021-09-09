@@ -333,8 +333,8 @@ class purgeWindow(baseWindow):
 
 	def sensorSetup(self):
 		self.sensor1 = sensor(adc=self.adc, channel=0)
-		self.sensor2 = sensor(adc=self.adc, channel=2)
-		self.sensor3 = sensor(adc=self.adc, channel=3)
+		self.sensor2 = sensor(adc=self.adc, channel=3)
+		self.sensor3 = sensor(adc=self.adc, channel=2)
 		self.sensor1.mainSignal.connect(self.updateSensor1)
 		self.sensor2.mainSignal.connect(self.updateSensor2)
 		self.sensor3.mainSignal.connect(self.updateSensor3)
@@ -410,8 +410,8 @@ class testWindow(baseWindow):
 
 	def sensorSetup(self):
 		self.sensor1 = sensor(adc=self.adc, channel=0)
-		self.sensor2 = sensor(adc=self.adc, channel=2)
-		self.sensor3 = sensor(adc=self.adc, channel=3)
+		self.sensor2 = sensor(adc=self.adc, channel=3)
+		self.sensor3 = sensor(adc=self.adc, channel=2)
 		self.sensor1.mainSignal.connect(self.updateSensor1v2)
 		self.sensor2.mainSignal.connect(self.updateSensor2v2)
 		self.sensor3.mainSignal.connect(self.updateSensor3v2)
@@ -583,8 +583,8 @@ class graphWindow(baseWindow):
 
 	def sensorSetup(self):
 		self.sensor1 = sensor(adc=self.adc, channel=0)
-		self.sensor2 = sensor(adc=self.adc, channel=2)
-		self.sensor3 = sensor(adc=self.adc, channel=3)
+		self.sensor2 = sensor(adc=self.adc, channel=3)
+		self.sensor3 = sensor(adc=self.adc, channel=2)
 		self.sensor1.mainSignal.connect(self.updateSensor1)
 		self.sensor2.mainSignal.connect(self.updateSensor2)
 		self.sensor3.mainSignal.connect(self.updateSensor3)
