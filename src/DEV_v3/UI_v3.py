@@ -468,9 +468,6 @@ class testWindow(baseWindow):
 		self.recoveryTimer.setSingleShot(True)
 		self.recoveryTimer.timeout.connect(lambda: self.SM.recover())
 
-	def collectBaseline(self):
-
-
 	def buttonSetup(self):
 		self.b1 = button("Start")
 		self.b1.clicked.connect(lambda: self.startTest())
