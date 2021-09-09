@@ -562,91 +562,86 @@ class testWindow(baseWindow):
 class graphWindow(baseWindow):
 	def __init__(self):
 		super(graphWindow, self).__init__()
+		self.loadData()
+		self.loadComponents()
+		self.SM.start()
+		self.sensorSetup()
+		self.buttonSetup()
+		self.loadUI()
 
-	class purgeWindow(baseWindow):
-		def __init__(self):
-			super(purgeWindow, self).__init__()
-			self.loadData()
-			self.loadComponents()
-			self.SM.start()
-			self.sensorSetup()
-			self.buttonSetup()
-			self.timerSetup()
-			self.loadUI()
+	def sensorSetup(self):
+		self.sensor1 = sensor(adc=self.adc, channel=0)
+		self.sensor2 = sensor(adc=self.adc, channel=2)
+		self.sensor3 = sensor(adc=self.adc, channel=3)
+		self.sensor1.mainSignal.connect(self.updateSensor1)
+		self.sensor2.mainSignal.connect(self.updateSensor2)
+		self.sensor3.mainSignal.connect(self.updateSensor3)
+		self.sensor1.start()
+		self.sensor2.start()
+		self.sensor3.start()
+		self.sensor1.startSensor()
+		self.sensor2.startSensor()
+		self.sensor3.startSensor()
 
-		def sensorSetup(self):
-			self.sensor1 = sensor(adc=self.adc, channel=0)
-			self.sensor2 = sensor(adc=self.adc, channel=2)
-			self.sensor3 = sensor(adc=self.adc, channel=3)
-			self.sensor1.mainSignal.connect(self.updateSensor1)
-			self.sensor2.mainSignal.connect(self.updateSensor2)
-			self.sensor3.mainSignal.connect(self.updateSensor3)
-			self.sensor1.start()
-			self.sensor2.start()
-			self.sensor3.start()
-			self.sensor1.startSensor()
-			self.sensor2.startSensor()
-			self.sensor3.startSensor()
+	def buttonSetup(self):
+		self.b1 = button("Expose")
+		self.b1.clicked.connect(lambda: self.SM.expose())
 
-		def buttonSetup(self):
-			self.b1 = button("Expose")
-			self.b1.clicked.connect(lambda: self.SM.expose())
+		self.b2 = button("Recover")
+		self.b2.clicked.connect(lambda: self.SM.recover())
 
-			self.b2 = button("Recover")
-			self.b2.clicked.connect(lambda: self.SM.recover())
+		self.b3 = button("Release")
+		self.b3.clicked.connect(lambda: self.SM.motor.release())
 
-			self.b3 = button("Release")
-			self.b3.clicked.connect(lambda: self.SM.motor.release())
+		self.buttonStatus = False
+		self.b4 = button("<<")
+		self.b4.pressed.connect(lambda: self.move(0))
+		self.b4.released.connect(lambda: self.endMove())
 
-			self.buttonStatus = False
-			self.b4 = button("<<")
-			self.b4.pressed.connect(lambda: self.move(0))
-			self.b4.released.connect(lambda: self.endMove())
+		self.b5 = button(">>")
+		self.b5.pressed.connect(lambda: self.move(1))
+		self.b5.released.connect(lambda: self.endMove())
 
-			self.b5 = button(">>")
-			self.b5.pressed.connect(lambda: self.move(1))
-			self.b5.released.connect(lambda: self.endMove())
+		self.b6 = button("Toggle Valve")
+		self.b6.clicked.connect(lambda: self.valve.toggle())
 
-			self.b6 = button("Toggle Valve")
-			self.b6.clicked.connect(lambda: self.valve.toggle())
+		self.b7 = button("Toggle Pump")
+		self.b7.clicked.connect(lambda: self.pump.toggle())
 
-			self.b7 = button("Toggle Pump")
-			self.b7.clicked.connect(lambda: self.pump.toggle())
+		self.b8 = button("Home")
+		self.b8.clicked.connect(lambda: self.loadNewWindow(6))
 
-			self.b8 = button("Home")
-			self.b8.clicked.connect(lambda: self.loadNewWindow(6))
+	def move(self, direction):
+		if direction == 0:
+			self.SM.stepDirection = stepper.BACKWARD
+		else:
+			self.SM.stepDirection = stepper.FORWARD
+		# print("starting movement")
+		self.buttonStatus = True
+		while self.buttonStatus:
+			app.processEvents()
+			self.SM.move()
+		self.SM.motor.release()
 
-		def move(self, direction):
-			if direction == 0:
-				self.SM.stepDirection = stepper.BACKWARD
-			else:
-				self.SM.stepDirection = stepper.FORWARD
-			# print("starting movement")
-			self.buttonStatus = True
-			while self.buttonStatus:
-				app.processEvents()
-				self.SM.move()
-			self.SM.motor.release()
+	def endMove(self):
+		self.buttonStatus = False
+		self.SM.motor.release()
+		print("Current Position: {}".format(self.SM.currentPos))
 
-		def endMove(self):
-			self.buttonStatus = False
-			self.SM.motor.release()
-			print("Current Position: {}".format(self.SM.currentPos))
+	def loadUI(self):
+		self.layout = QGridLayout()
 
-		def loadUI(self):
-			self.layout = QGridLayout()
+		self.layout.addWidget(self.graph, 0, 0, 4, 4)
+		self.layout.addWidget(self.b1, 4, 0, 1, 1)
+		self.layout.addWidget(self.b2, 4, 1, 1, 1)
+		self.layout.addWidget(self.b3, 5, 0, 1, 1)
+		self.layout.addWidget(self.b4, 5, 1, 1, 1)
+		self.layout.addWidget(self.b5, 4, 2, 1, 1)
+		self.layout.addWidget(self.b6, 4, 3, 1, 1)
+		self.layout.addWidget(self.b7, 5, 2, 1, 1)
+		self.layout.addWidget(self.b8, 5, 3, 1, 1)
 
-			self.layout.addWidget(self.graph, 0, 0, 4, 4)
-			self.layout.addWidget(self.b1, 4, 0, 1, 1)
-			self.layout.addWidget(self.b2, 4, 1, 1, 1)
-			self.layout.addWidget(self.b3, 5, 0, 1, 1)
-			self.layout.addWidget(self.b4, 5, 1, 1, 1)
-			self.layout.addWidget(self.b5, 4, 2, 1, 1)
-			self.layout.addWidget(self.b6, 4, 3, 1, 1)
-			self.layout.addWidget(self.b7, 5, 2, 1, 1)
-			self.layout.addWidget(self.b8, 5, 3, 1, 1)
-
-			self.setLayout(self.layout)
+		self.setLayout(self.layout)
 
 
 if __name__ == "__main__":
