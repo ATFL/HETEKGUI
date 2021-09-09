@@ -540,19 +540,19 @@ class testWindow(baseWindow):
 		self.timeArray2.append(self.timeArray2[-1]+0.01)
 		self.sensor1Array.append(arr)
 		self.sensor1Plot.setData(self.timeArray2, self.sensor1Array)
-		self.sensor1Label.setText("Microchannel Sensor:\n{:.3f}V".format(np.mean(self.sensor1Array[100:])))
+		self.sensor1Label.setText("Microchannel Sensor:\n{:.3f}V".format(np.mean(self.sensor1Array[-25:])))
 
 	@pyqtSlot(float)
 	def updateSensor2v2(self, arr):
 		self.sensor2Array.append(arr)
 		self.sensor2Plot.setData(self.timeArray2, self.sensor2Array)
-		self.sensor2Label.setText("Chamber Sensor:\n{:.3f}V".format(np.mean(self.sensor2Array[100:])))
+		self.sensor2Label.setText("Chamber Sensor:\n{:.3f}V".format(np.mean(self.sensor2Array[-25:])))
 
 	@pyqtSlot(float)
 	def updateSensor3v2(self, arr):
 		self.sensor3Array.append(arr)
 		self.sensor3Plot.setData(self.timeArray2, self.sensor3Array)
-		self.sensor3Label.setText("Baseline Sensor:\n{:.3f}V".format(np.mean(self.sensor3Array[100:])))
+		self.sensor3Label.setText("Baseline Sensor:\n{:.3f}V".format(np.mean(self.sensor3Array[-25:])))
 
 	def loadUI(self):
 		self.layout = QGridLayout()
