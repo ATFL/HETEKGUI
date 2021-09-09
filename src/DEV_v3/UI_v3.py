@@ -503,7 +503,6 @@ class testWindow(baseWindow):
 		self.save = self.askSave()
 		if self.save == QMessageBox.Ok:
 			self.saveData()
-		self.b3.setDisabled(False)
 
 	def askSave(self):
 		self.saveMsg = QMessageBox()
@@ -534,6 +533,7 @@ class testWindow(baseWindow):
 			self.exposeTimer.stop()
 		if self.recoveryTimer.isActive():
 			self.recoveryTimer.stop()
+		self.b3.setDisabled(False)
 
 	@pyqtSlot(float)
 	def updateSensor1v2(self, arr):
