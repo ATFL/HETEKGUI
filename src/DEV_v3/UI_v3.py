@@ -92,7 +92,7 @@ class Stepper(QThread):
 		self.motor = channel
 		self.currentPos = 0
 		self.stepDirection = stepper.FORWARD
-		self.stepStyle = stepper.SINGLE
+		self.stepStyle = stepper.DOUBLE
 		self.motor.release()
 		# self.stepperMinVal = -20
 		# self.stepperMaxVal = 140
@@ -139,7 +139,7 @@ class Stepper(QThread):
 				self.currentPos = self.currentPos + 1
 			else:
 				self.currentPos = self.currentPos - 1
-			time.sleep(0.01)
+			#time.sleep(0.001)
 		self.motor.release()
 
 	def move(self):
