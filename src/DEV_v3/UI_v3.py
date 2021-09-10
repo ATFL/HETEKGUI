@@ -482,6 +482,9 @@ class testWindow(baseWindow):
 		self.b3 = button("Home")
 		self.b3.clicked.connect(lambda: self.loadNewWindow(6))
 
+		self.meohBox = csSpinBox(0, max=2000, min=0, int=10, suffix='ppm')
+		self.etohBox = csSpinBox(0, max=2000, min=0, int=10, suffix='ppm')
+
 	def startTest(self):
 		# STEP 1: PURGE TO FILL
 		self.b1.setDisabled(True)
@@ -501,7 +504,9 @@ class testWindow(baseWindow):
 
 	def endTest(self):
 		self.stop()
-		self.filename = "d4v3_{}.csv".format(datetime.now().strftime('%m%d%H%M%S'))
+		self.meohVal = self.meohBox.value()
+		self.etohVal = self.etohBox.value()
+		self.filename = "d4v3_m{}_e{}_{}.csv".format(self.meohVal, self.etohVal, datetime.now().strftime('%m%d%H%M%S'))
 		self.filenameTotal = self.dataPath + self.filename
 		self.stackedArray = [self.timeArray2, self.sensor1Array, self.sensor2Array, self.sensor3Array]
 		self.save = self.askSave()
@@ -568,6 +573,8 @@ class testWindow(baseWindow):
 		self.layout.addWidget(self.sensor1Label, 5, 0, 1, 1)
 		self.layout.addWidget(self.sensor2Label, 5, 1, 1, 1)
 		self.layout.addWidget(self.sensor3Label, 5, 2, 1, 1)
+		self.layout.addWidget(self.meohBox, 6, 0, 1, 1)
+		self.layout.addWidget(self.etohBox, 6, 1, 1, 1)
 		self.setLayout(self.layout)
 
 
