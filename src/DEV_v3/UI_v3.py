@@ -91,7 +91,7 @@ class Stepper(QThread):
 		super(Stepper, self).__init__()
 		self.motor = channel
 		self.currentPos = 0
-		self.stepDirection = stepper.FORWARD
+		self.stepDirection = stepper.BACKWARD
 		self.stepStyle = stepper.INTERLEAVE
 		self.motor.release()
 		# self.stepperMinVal = -20
@@ -100,7 +100,7 @@ class Stepper(QThread):
 
 	def expose(self):
 		if not self.stepperPos == "exposed":
-			self.stepDirection = stepper.FORWARD
+			self.stepDirection = stepper.BACKWARD
 			print("Exposing")
 			self.step(370)
 			self.stepperPos = "exposed"
@@ -109,20 +109,20 @@ class Stepper(QThread):
 
 	def recover(self):
 		if not self.stepperPos == "recovered":
-			self.stepDirection = stepper.BACKWARD
+			self.stepDirection = stepper.FORWARD
 			self.step(370)
 			print("Recovering")
 			self.stepperPos = "recovered"
 		self.motor.release()
 
 	def moveLeft(self):
-		self.stepDirection = stepper.FORWARD
+		self.stepDirection = stepper.BACKWARD
 		self.step(10)
 		# print("<<")
 		self.stepperPos = "mid"
 
 	def moveRight(self):
-		self.stepDirection = stepper.BACKWARD
+		self.stepDirection = stepper.FORWARD
 		self.step(10)
 		# print(">>")
 		self.stepperPos = "mid"
@@ -145,7 +145,7 @@ class Stepper(QThread):
 
 	def move(self):
 		self.motor.onestep(direction=self.stepDirection, style=self.stepStyle)
-		if self.stepDirection == stepper.FORWARD:
+		if self.stepDirection == stepper.BACKWARD:
 			self.currentPos = self.currentPos + 1
 		else:
 			self.currentPos = self.currentPos - 1
