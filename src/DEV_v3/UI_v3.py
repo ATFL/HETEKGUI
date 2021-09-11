@@ -365,8 +365,8 @@ class purgeWindow(baseWindow):
 		self.purgeTimer2.setSingleShot(True)
 		self.purgeTimer.timeout.connect(lambda: self.SM.expose())
 		self.purgeTimer2.timeout.connect(lambda: self.stop())
-		self.purge1Time = 30000  # normally 20000
-		self.purge2Time = 45000  # normally 30000
+		self.purge1Time = 60000  # normally 20000
+		self.purge2Time = 80000  # normally 30000
 
 	def purge(self):
 		self.valve.activate()
