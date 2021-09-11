@@ -482,8 +482,8 @@ class testWindow(baseWindow):
 		self.b3 = button("Home")
 		self.b3.clicked.connect(lambda: self.loadNewWindow(6))
 
-		self.meohBox = csSpinBox(0, max=2000, min=0, int=10, suffix='ppm')
-		self.etohBox = csSpinBox(0, max=2000, min=0, int=10, suffix='ppm')
+		self.meohBox = csSpinBox(0, max=2000, min=0, step=10, suffix='ppm')
+		self.etohBox = csSpinBox(0, max=2000, min=0, step=10, suffix='ppm')
 
 	def startTest(self):
 		# STEP 1: PURGE TO FILL
