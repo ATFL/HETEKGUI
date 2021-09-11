@@ -487,6 +487,8 @@ class testWindow(baseWindow):
 
 	def startTest(self):
 		# STEP 1: PURGE TO FILL
+		self.SM.expose()
+		self.resetData()
 		self.b1.setDisabled(True)
 		self.b3.setDisabled(True)
 		self.valve.activate()
@@ -495,12 +497,12 @@ class testWindow(baseWindow):
 
 	def startDataCollection(self):
 		# STEP 2: Purge Done, Starting test
+		self.SM.recover()
 		self.pump.deactivate()
 		self.valve.deactivate()
-		self.resetData()
 		self.testTimer.start(self.endTestTime)
-		self.exposeTimer.start(self.exposeTime)
-		self.recoveryTimer.start(self.recoverTime)
+		# self.exposeTimer.start(self.exposeTime)
+		# self.recoveryTimer.start(self.recoverTime)
 
 	def endTest(self):
 		self.stop()
