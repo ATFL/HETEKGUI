@@ -454,7 +454,7 @@ class testWindow(baseWindow):
 		self.sampleCollectTime = 3000  # normally 30000
 		self.exposeTime = 1000  # normally 10000
 		self.recoverTime = 5000  # normally 50000
-		self.endTestTime = 20000  # normally 200000
+		self.endTestTime = 30000  # normally 200000
 
 		self.sampleCollectTimer = QTimer()
 		self.sampleCollectTimer.setSingleShot(True)
