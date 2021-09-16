@@ -23,6 +23,7 @@ class ML:
 
 if __name__ == "__main__":
 	myFiles = os.listdir("data/")
-	print(myFiles)
+	paths=sorted(Path("data/").iterdir(), key=os.path.getmtime)
+	print(paths)
 	print(len(myFiles))
 	#A = ML(filename)
