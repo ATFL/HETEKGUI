@@ -732,3 +732,4 @@ if __name__ == "__main__":
 	UI = homeWindow().show()
 	sys.exit(app.exec_())
 
+os.system("python3 analyzeFile.py")

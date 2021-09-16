@@ -16,6 +16,8 @@ import Adafruit_ADS1x15 as adc
 from adafruit_motorkit import MotorKit
 from adafruit_motor import stepper
 
+from ML import *
+
 
 app = QApplication(sys.argv)
 
@@ -515,6 +517,7 @@ class testWindow(baseWindow):
 		self.save = self.askSave()
 		if self.save == QMessageBox.Ok:
 			self.saveData()
+		ML(self.filename)
 
 	def askSave(self):
 		self.saveMsg = QMessageBox()
