@@ -23,6 +23,7 @@ class ML:
 		print(self.clfVal)
 		disp = display(self.clfVal)
 		disp.show()
+		sys.exit(app.exec_())
 
 	def loadFile(self, filename):
 		data = pd.read_csv("{}".format(filename), delimiter=',')
