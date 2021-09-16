@@ -451,10 +451,10 @@ class testWindow(baseWindow):
 		self.path = os.getcwd()
 		self.dataPath = "{}/data/".format(self.path)
 
-		self.sampleCollectTime = 3000  # normally 30000
-		self.exposeTime = 1000  # normally 10000
-		self.recoverTime = 5000  # normally 50000
-		self.endTestTime = 30000  # normally 200000
+		self.sampleCollectTime = 30000  # normally 30000
+		self.exposeTime = 10000  # normally 10000
+		self.recoverTime = 50000  # normally 50000
+		self.endTestTime = 200000  # normally 200000
 
 		self.sampleCollectTimer = QTimer()
 		self.sampleCollectTimer.setSingleShot(True)
