@@ -15,7 +15,7 @@ class ML:
 		print(self.clfVal)
 
 	def loadFile(self, filename):
-		data = pd.read_csv("data/{}".format(filename), delimiter=',')
+		data = pd.read_csv("{}".format(filename), delimiter=',')
 		self.myarray = data.values
 		self.myarray = self.myarray[1, 0:3900].reshape(1, -1)
 		self.analyze(self.myarray)
@@ -24,6 +24,5 @@ class ML:
 if __name__ == "__main__":
 	myFiles = os.listdir("data/")
 	paths=sorted(Path("data/").iterdir(), key=os.path.getmtime)
-	print(paths[-1])
-	print(len(myFiles))
-	#A = ML(filename)
+	#print(paths[-1])
+	A = ML(paths[-1])
