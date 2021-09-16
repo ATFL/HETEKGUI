@@ -45,9 +45,9 @@ class display(QWidget):
 	def loadWindowSettings(self):
 		self.width = 50
 		self.height = 50
-		self.bg_color = '#484848'
-		self.setStyleSheet('background-color: {}'.format(self.bg_color))
-		self.setGeometry(0, 0, self.width, self.height)
+		#self.bg_color = '#484848'
+		#self.setStyleSheet('background-color: {}'.format(self.bg_color))
+		self.setGeometry(100, 100, self.width, self.height)
 		print("Window Settings Loaded")
 
 
