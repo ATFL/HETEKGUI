@@ -4,7 +4,7 @@ import pickle5 as pickle
 import pandas as pd
 
 class ML:
-	def init__(self, file):
+	def __init__(self, file):
 		super(ML, self).__init__()
 		self.loadFile(file)
 
