@@ -508,10 +508,6 @@ class testWindow(baseWindow):
 		self.stop()
 		self.meohVal = self.meohBox.value()
 		self.etohVal = self.etohBox.value()
-		self.sensor1.quit()
-		self.sensor2.quit()
-		self.sensor3.quit()
-		self.SM.quit()
 		self.filename = "d4v3_m{}_e{}_{}.csv".format(self.meohVal, self.etohVal, datetime.now().strftime('%m%d%H%M%S'))
 		self.filenameTotal = self.dataPath + self.filename
 		self.stackedArray = [self.timeArray2, self.sensor1Array, self.sensor2Array, self.sensor3Array]
