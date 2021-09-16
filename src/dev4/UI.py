@@ -519,7 +519,7 @@ class testWindow(baseWindow):
 		self.analyzeML()
 
 	def analyzeML(self):
-		import pickle
+		import pickle5 as pickle
 		self.clfFile = open('classifier.obj', 'rb')
 		self.clf = pickle.load(self.clfFile)
 		self.clfVal = self.clf.predict(self.stackedArray[1, 0:3900])
