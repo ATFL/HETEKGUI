@@ -516,6 +516,7 @@ class testWindow(baseWindow):
 		if self.save == QMessageBox.Ok:
 			self.saveData()
 		os.system("python3 ML.py")
+		self.close()
 
 	def askSave(self):
 		self.saveMsg = QMessageBox()
