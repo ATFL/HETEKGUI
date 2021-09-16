@@ -10,7 +10,7 @@ def analyze(file):
 def loadFile(filename):
 	data = pd.read_csv("{}".format(filename), delimiter=',')
 	myarray = data.values
-	myarray = myarray[1, 0:3900]
+	myarray = myarray[1, 0:3900].reshape(1, -1)
 	analyze(myarray)
 
 if __name__ == "__main__":
