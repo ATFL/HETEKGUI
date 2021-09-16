@@ -37,14 +37,14 @@ class display(QWidget):
 		super(display, self).__init__()
 		self.loadWindowSettings()
 		self.myLabel = QLabel()
-		self.myLabel.setText(str(value))
+		self.myLabel.setText("ML OUTPUT: {}\n0 -- No Methane or Ethane\n1 -- Methane \n2 -- Ethane\n3 -- Methane and Ethane".format(value))
 		self.layout = QGridLayout()
 		self.layout.addWidget(self.myLabel)
 		self.setLayout(self.layout)
 
 	def loadWindowSettings(self):
-		self.width = 50
-		self.height = 50
+		self.width = 100
+		self.height = 100
 		#self.bg_color = '#484848'
 		#self.setStyleSheet('background-color: {}'.format(self.bg_color))
 		self.setGeometry(100, 100, self.width, self.height)
