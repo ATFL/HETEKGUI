@@ -19,11 +19,14 @@ class ML:
 	def analyze(self):
 		self.clfFile = open('classifier.obj', 'rb')
 		self.clf = pickle.load(self.clfFile)
-		self.clfVal = self.clf.predict(self.myarray)
-		print(self.clfVal)
-		disp = display(self.clfVal)
-		disp.show()
-		sys.exit(app.exec_())
+		try:
+			self.clfVal = self.clf.predict(self.myarray)
+			print(self.clfVal)
+			disp = display(self.clfVal)
+			disp.show()
+			sys.exit(app.exec_())
+		except:
+			print("Not enough data")
 
 	def loadFile(self, filename):
 		data = pd.read_csv("{}".format(filename), delimiter=',')
