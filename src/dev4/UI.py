@@ -204,7 +204,7 @@ class baseWindow(QWidget):
 		self.adc = adc.ADS1115(0x48)
 		self.SM = Stepper(self.kit.stepper1)
 		self.valve = MOTOR(self.kit.motor3, "Valve", 1)
-		self.pump = MOTOR(self.kit.motor4, "Pump", 1)
+		self.pump = MOTOR(self.kit.motor4, "Pump", 0.9)
 
 		self.valve.deactivate()
 		self.pump.deactivate()
