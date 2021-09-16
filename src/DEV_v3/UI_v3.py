@@ -497,9 +497,10 @@ class testWindow(baseWindow):
 
 	def startDataCollection(self):
 		# STEP 2: Purge Done, Starting test
-		self.SM.recover()
+
 		self.pump.deactivate()
 		self.valve.deactivate()
+		self.SM.recover()
 		self.testTimer.start(self.endTestTime)
 		# self.exposeTimer.start(self.exposeTime)
 		# self.recoveryTimer.start(self.recoverTime)
