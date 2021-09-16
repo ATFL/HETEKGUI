@@ -18,5 +18,3 @@ class ML:
 		self.myarray = self.myarray[1, 0:3900].reshape(1, -1)
 		self.analyze(self.myarray)
 
-if __name__ == "__main__":
-	myfile =
