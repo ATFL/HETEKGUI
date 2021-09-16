@@ -497,9 +497,11 @@ class testWindow(baseWindow):
 
 	def startDataCollection(self):
 		# STEP 2: Purge Done, Starting test
+
 		self.pump.deactivate()
 		self.valve.deactivate()
 		self.SM.recover()
+		print("All systems off")
 		self.testTimer.start(self.endTestTime)
 		# self.exposeTimer.start(self.exposeTime)
 		# self.recoveryTimer.start(self.recoverTime)
