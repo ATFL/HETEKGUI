@@ -18,7 +18,7 @@ class ML:
 		data = pd.read_csv("{}".format(filename), delimiter=',')
 		self.myarray = data.values
 		self.myarray = self.myarray[1, 0:3900].reshape(1, -1)
-		self.analyze(self.myarray)
+		self.analyze()
 
 
 if __name__ == "__main__":
