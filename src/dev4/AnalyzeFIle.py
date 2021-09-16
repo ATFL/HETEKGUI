@@ -9,7 +9,8 @@ def analyze(file):
 
 def loadFile(filename):
 	data = pd.read_csv("{}".format(filename), delimiter=',')
-	myarray = data[1, 0:3900].values
+	myarray = data.values
+	myarray = myarray[1, 0:3900]
 	analyze(myarray)
 
 if __name__ == "__main__":
