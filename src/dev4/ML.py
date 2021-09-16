@@ -1,5 +1,5 @@
 import os
-
+from pathlib import Path
 import pickle5 as pickle
 import pandas as pd
 
@@ -22,5 +22,7 @@ class ML:
 
 
 if __name__ == "__main__":
-	os.listdir("data/")
+	myFiles = os.listdir("data/")
+	print(myFiles)
+	print(len(myFiles))
 	#A = ML(filename)
