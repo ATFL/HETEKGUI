@@ -13,6 +13,7 @@ class ML:
 		self.clf = pickle.load(self.clfFile)
 		self.clfVal = self.clf.predict(self.myarray)
 		print(self.clfVal)
+		return(self.clfVal)
 
 	def loadFile(self, filename):
 		data = pd.read_csv("{}".format(filename), delimiter=',')
