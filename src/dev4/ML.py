@@ -20,7 +20,9 @@ class ML:
 		self.clfFile = open('classifier.obj', 'rb')
 		self.clf = pickle.load(self.clfFile)
 		self.clfVal = self.clf.predict(self.myarray)
-		# print(self.clfVal)
+		print(self.clfVal)
+		disp = display(self.clfVal)
+		disp.show()
 
 	def loadFile(self, filename):
 		data = pd.read_csv("{}".format(filename), delimiter=',')
@@ -37,7 +39,6 @@ class display(QWidget):
 		self.layout = QGridLayout()
 		self.layout.addWidget(self.myLabel)
 		self.setLayout(self.layout)
-		self.show()
 
 
 if __name__ == "__main__":
