@@ -269,7 +269,6 @@ class baseWindow(QWidget):
 		else:
 			self.nw = homeWindow()
 		self.nw.show()
-		self.close()
 
 
 class homeWindow(baseWindow):
