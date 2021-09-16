@@ -269,7 +269,6 @@ class baseWindow(QWidget):
 		else:
 			self.nw = homeWindow()
 		self.nw.show()
-		self.close()
 
 
 class homeWindow(baseWindow):
@@ -454,7 +453,7 @@ class testWindow(baseWindow):
 		self.sampleCollectTime = 30000  # normally 30000
 		self.exposeTime = 10000  # normally 10000
 		self.recoverTime = 50000  # normally 50000
-		self.endTestTime = 200000  # normally 120000
+		self.endTestTime = 200000  # normally 200000
 
 		self.sampleCollectTimer = QTimer()
 		self.sampleCollectTimer.setSingleShot(True)
@@ -501,6 +500,7 @@ class testWindow(baseWindow):
 		self.pump.deactivate()
 		self.valve.deactivate()
 		self.SM.recover()
+		print("All systems off")
 		self.testTimer.start(self.endTestTime)
 		# self.exposeTimer.start(self.exposeTime)
 		# self.recoveryTimer.start(self.recoverTime)
@@ -515,6 +515,19 @@ class testWindow(baseWindow):
 		self.save = self.askSave()
 		if self.save == QMessageBox.Ok:
 			self.saveData()
+		self.analyzeML()
+
+	def analyzeML(self):
+		import pickle5 as pickle
+		self.clfFile = open('classifier.obj', 'rb')
+		self.clf = pickle.load(self.clfFile)
+		self.clfVal = self.clf.predict(self.stackedArray[1, 0:3900])
+		self.mlMsg = QMessageBox()
+		self.mlMsg.setIcon(QMessageBox.Information)
+		self.mlMsg.setText("ML Analysis")
+
+		self.mlMsg.setInformativeText("CLF Value: {}\n0 - No Methane or Ethane\n1 - Methane Only\n2 - Ethane Only\n3 - Methane and Ethane".format(self.clfVal))
+		self.saveMsg.setStandardButtons(QMessageBox.Ok)
 
 	def askSave(self):
 		self.saveMsg = QMessageBox()
