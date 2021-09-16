@@ -16,6 +16,8 @@ import Adafruit_ADS1x15 as adc
 from adafruit_motorkit import MotorKit
 from adafruit_motor import stepper
 
+import pickle5 as pickle
+
 
 app = QApplication(sys.argv)
 
@@ -406,6 +408,7 @@ class testWindow(baseWindow):
 		self.loadData()
 		self.loadTimers()
 		self.buttonSetup()
+
 		self.loadUI()
 
 	def sensorSetup(self):
@@ -440,6 +443,8 @@ class testWindow(baseWindow):
 		self.sensor1Label.setStyleSheet('color: #dbd9cc')
 		self.sensor2Label.setStyleSheet('color: #dbd9cc')
 		self.sensor3Label.setStyleSheet('color: #dbd9cc')
+
+		self.clf = pickle.load(open('classifier.obj', 'rb'))
 
 	def resetData(self):
 		self.timeArray2 = [0]
@@ -515,7 +520,10 @@ class testWindow(baseWindow):
 		self.save = self.askSave()
 		if self.save == QMessageBox.Ok:
 			self.saveData()
+		self.analyzeData()
 
+	def analyzeData(self):
+		print("Data is Analyzed")
 	def askSave(self):
 		self.saveMsg = QMessageBox()
 		self.saveMsg.setIcon(QMessageBox.Information)
