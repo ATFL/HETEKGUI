@@ -35,11 +35,20 @@ class ML:
 class display(QWidget):
 	def __init__(self, value):
 		super(display, self).__init__()
+		self.loadWindowSettings()
 		self.myLabel = QLabel()
 		self.myLabel.setText(str(value))
 		self.layout = QGridLayout()
 		self.layout.addWidget(self.myLabel)
 		self.setLayout(self.layout)
+
+	def loadWindowSettings(self):
+		self.width = 50
+		self.height = 50
+		self.bg_color = '#484848'
+		self.setStyleSheet('background-color: {}'.format(self.bg_color))
+		self.setGeometry(0, 0, self.width, self.height)
+		print("Window Settings Loaded")
 
 
 if __name__ == "__main__":
