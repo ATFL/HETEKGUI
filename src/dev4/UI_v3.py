@@ -626,9 +626,9 @@ class analysisWindow(baseWindow):
 		self.myArray = self.data[1, 0:3900]
 		self.timeArray = [0 for _ in range(len(self.myArray))]
 		self.sensorPlot.setData(self.timeArray, self.myArray)
-		self.clf = pickle.load(open('classifier.obj', 'rb'))
-		self.clfVal = self.clf.predict(self.myArray)
-		print(self.clfVal)
+		#self.clf = pickle.load(open('classifier.obj', 'rb'))
+		#self.clfVal = self.clf.predict(self.myArray)
+		#print(self.clfVal)
 
 	def loadUI(self):
 		self.layout = QGridLayout()
