@@ -2,5 +2,5 @@
 Type=Application
 Name=UI
 Terminal=false
-Exec=/home/pi/Desktop/hetekgui/dev4/UI.sh
-Icon=/home/pi/Desktop/hetekgui/images/hetek_logo.png
+Exec=/home/pi/Desktop/hetekgui/src/dev4/UI.sh
+Icon=/home/pi/Desktop/hetekgui/src/images/hetek_logo.png
