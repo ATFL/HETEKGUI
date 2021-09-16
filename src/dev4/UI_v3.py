@@ -194,8 +194,8 @@ class baseWindow(QWidget):
 		self.loadWindowSettings()
 
 	def loadWindowSettings(self):
-		self.width = 480
-		self.height = 320
+		self.width = 460
+		self.height = 300
 		self.bg_color = '#484848'
 		self.setStyleSheet('background-color: {}'.format(self.bg_color))
 		self.setGeometry(0, 0, self.width, self.height)
@@ -237,7 +237,6 @@ class baseWindow(QWidget):
 		self.sensor2Label.setStyleSheet('color: #dbd9cc')
 		self.sensor3Label.setStyleSheet('color: #dbd9cc')
 
-
 	@pyqtSlot(float)
 	def updateSensor1(self, arr):
 		self.sensor1Array = self.sensor1Array[1:]
@@ -268,6 +267,8 @@ class baseWindow(QWidget):
 			self.nw = graphWindow()
 		elif win == 3:
 			self.nw = homeWindow()
+		elif win == 4:
+			self.nw = analysisWindow()
 		else:
 			self.nw = homeWindow()
 		self.nw.show()
@@ -299,6 +300,9 @@ class homeWindow(baseWindow):
 		self.b5 = button("Exit")
 		self.b5.clicked.connect(lambda: self.exitFunction())
 
+		self.b6 = button("ML Analysis")
+		self.b6.clicked.connect(lambda: self.loadNewWindow(4))
+
 	def exitFunction(self):
 		self.exitMsg = QMessageBox()
 		self.exitMsg.setText("Do you Want to shutdown?")
@@ -317,6 +321,7 @@ class homeWindow(baseWindow):
 		self.layout.addWidget(self.b2)
 		self.layout.addWidget(self.b3)
 		self.layout.addWidget(self.b4)
+		self.layout.addWidget(self.b6)
 		self.layout.addWidget(self.b5)
 
 		self.setLayout(self.layout)
@@ -586,6 +591,52 @@ class testWindow(baseWindow):
 		self.layout.addWidget(self.sensor3Label, 5, 2, 1, 1)
 		self.layout.addWidget(self.meohBox, 6, 0, 1, 1)
 		self.layout.addWidget(self.etohBox, 6, 1, 1, 1)
+		self.setLayout(self.layout)
+
+
+class analysisWindow(baseWindow):
+	def __init__(self, data=None):
+		super(analysisWindow, self).__init__()
+		if data is not None:
+			self.data = data
+			self.graphAnalyze()
+		self.loadData()
+		self.buttonSetup()
+		self.loadUI()
+
+	def loadData(self):
+		self.graph = graph()
+		self.timeArray = [0]
+		self.myArray = [0]
+		self.mcc = pg.mkPen(color=(47, 209, 214), width=2)
+		self.sensorPlot = self.graph.plot(self.timeArray, self.myArray, pen=self.mcc)
+		self.graph.setYRange(0, 5)
+
+	def buttonSetup(self):
+		self.b1 = button("Graph and Analyze")
+		self.b1.clicked.connect(lambda: self.graphAnalyze())
+
+		self.b2 = button("Load data")
+		self.b2.clicked.connect(lambda: self.loadFile())
+
+		self.b3 = button("Home")
+		self.b3.clicked.connect(lambda: self.loadNewWindow(6))
+
+	def graphAnalyze(self):
+		self.myArray = self.data[1, 0:3900]
+		self.timeArray = [0 for _ in range(len(self.myArray))]
+		self.sensorPlot.setData(self.timeArray, self.myArray)
+		self.clf = pickle.load(open('classifier.obj', 'rb'))
+		self.clfVal = self.clf.predict(self.myArray)
+		print(self.clfVal)
+
+	def loadUI(self):
+		self.layout = QGridLayout()
+		self.layout.addWidget(self.graph, 0, 0, 3, 3)
+		self.layout.addWidget(self.b1, 3, 0, 1, 1)
+		self.layout.addWidget(self.b2, 3, 1, 1, 1)
+		self.layout.addWidget(self.b3, 3, 2, 1, 1)
+
 		self.setLayout(self.layout)
 
 
