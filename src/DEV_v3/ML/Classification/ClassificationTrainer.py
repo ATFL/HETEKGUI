@@ -9,9 +9,9 @@ import pickle
 
 class ML:
 	def __init__(self, data, targets):
-		self.data = pd.read_csv("../data/{}.csv".format(data), delimiter=',')
-		self.targets = pd.read_csv("../data/{}.csv".format(targets), delimiter=',')
-		self.X = self.data.values[:, 0:3900]
+		self.data = pd.read_csv("{}.csv".format(data), delimiter=',')
+		self.targets = pd.read_csv("{}.csv".format(targets), delimiter=',')
+		self.X = self.data.values[:, 0:3700]
 		self.Y = self.targets.values
 		self.Y = self.Y.reshape(len(self.Y), )
 		self.dataSize = self.data.shape
